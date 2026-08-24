@@ -48,8 +48,7 @@ body.dark select{
 }
 
 header{
-    background:
-    linear-gradient(135deg,rgba(15,76,129,.95),rgba(37,99,235,.95));
+    background:linear-gradient(135deg,rgba(15,76,129,.95),rgba(37,99,235,.95));
     color:white;
     text-align:center;
     padding:45px 20px;
@@ -294,6 +293,70 @@ button:hover{
     font-weight:bold;
 }
 
+.feature-actions{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-top:15px;
+}
+
+.feature-btn{
+    margin-top:0;
+    background:#7c3aed;
+}
+
+.copy-btn{
+    margin-top:0;
+    background:#0891b2;
+}
+
+.share-btn{
+    margin-top:0;
+    background:#db2777;
+}
+
+.history-item{
+    padding:15px;
+    margin-top:10px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:var(--card);
+    line-height:1.7;
+}
+
+.history-item small{
+    color:var(--muted);
+}
+
+.favourite-box{
+    margin-top:15px;
+    padding:15px;
+    border-radius:12px;
+    background:rgba(245,158,11,.12);
+    border-left:5px solid #f59e0b;
+}
+
+.notification{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    background:#15803d;
+    color:white;
+    padding:14px 20px;
+    border-radius:12px;
+    box-shadow:0 5px 20px rgba(0,0,0,.2);
+    display:none;
+    z-index:9999;
+}
+
+.trip-summary{
+    margin-top:15px;
+    padding:18px;
+    border-radius:12px;
+    background:rgba(124,58,237,.08);
+    border-left:5px solid #7c3aed;
+}
+
 footer{
     text-align:center;
     background:var(--secondary);
@@ -306,6 +369,7 @@ footer p{
 }
 
 @media(max-width:800px){
+
     .stats{
         grid-template-columns:1fr 1fr;
     }
@@ -319,7 +383,15 @@ footer p{
     }
 }
 
+@media(max-width:600px){
+
+    .feature-actions{
+        grid-template-columns:1fr;
+    }
+}
+
 @media(max-width:500px){
+
     .top-bar{
         position:static;
     }
@@ -389,8 +461,6 @@ footer p{
 
 <div class="container">
 
-<!-- STATS -->
-
 <div class="stats">
 
     <div class="stat">
@@ -415,9 +485,6 @@ footer p{
 
 </div>
 
-
-<!-- VEHICLE -->
-
 <div class="card">
 
     <h2 id="vehicleHeading">
@@ -440,9 +507,6 @@ footer p{
     </div>
 
 </div>
-
-
-<!-- TRIP -->
 
 <div class="card">
 
@@ -478,7 +542,6 @@ footer p{
 
     </div>
 
-
     <label>Trip Type</label>
 
     <div class="trip-options">
@@ -501,7 +564,6 @@ footer p{
 
     </div>
 
-
     <button onclick="showDistance()"
             class="distance-btn"
             id="distanceButton">
@@ -510,11 +572,9 @@ footer p{
 
     </button>
 
-
     <div class="distance-result"
          id="distanceResult">
     </div>
-
 
     <button onclick="openRoute()"
             id="routeButton">
@@ -523,20 +583,19 @@ footer p{
 
     </button>
 
-
     <div class="map-info">
 
         📍 Enter your starting location and destination.
 
-        <br>
+        <br><br>
 
         📏 Click <b>Show Distance</b> to calculate road distance.
 
-        <br>
+        <br><br>
 
-        🗺️ Google Maps will open the driving route.
+        🗺️ Google Maps will open in a new tab.
 
-        <br>
+        <br><br>
 
         🔄 Select Round Trip if you are returning
         to the starting location.
@@ -544,9 +603,6 @@ footer p{
     </div>
 
 </div>
-
-
-<!-- FUEL CALCULATOR -->
 
 <div class="card">
 
@@ -586,14 +642,12 @@ footer p{
 
     </div>
 
-
     <button onclick="calculateTrip()"
             id="calculateButton">
 
         Calculate My Trip
 
     </button>
-
 
     <button onclick="resetCalculator()"
             class="secondary-btn"
@@ -603,15 +657,96 @@ footer p{
 
     </button>
 
-
     <div class="result"
          id="result">
     </div>
 
 </div>
 
+<div class="card">
 
-<!-- TIPS -->
+    <h2>⭐ Smart Trip Tools</h2>
+
+    <div id="favouriteBox"
+         class="favourite-box"
+         style="display:none;">
+    </div>
+
+    <div class="feature-actions">
+
+        <button class="feature-btn"
+                onclick="saveFavouriteVehicle()">
+            ⭐ Save Favourite Vehicle
+        </button>
+
+        <button class="copy-btn"
+                onclick="copyTripResult()">
+            📋 Copy Result
+        </button>
+
+        <button class="share-btn"
+                onclick="shareTrip()">
+            📤 Share Trip
+        </button>
+
+    </div>
+
+</div>
+
+<div class="card">
+
+    <h2>🕘 Recent Trip History</h2>
+
+    <div id="tripHistory">
+
+        <div class="map-info">
+            No trips calculated yet.
+        </div>
+
+    </div>
+
+    <button class="secondary-btn"
+            onclick="clearHistory()">
+
+        🗑️ Clear History
+
+    </button>
+
+</div>
+
+<div class="card">
+
+    <h2>📊 Your Travel Summary</h2>
+
+    <div class="trip-summary">
+
+        <div class="result-grid">
+
+            <div class="result-item">
+                🚗 Total Trips<br>
+                <b id="totalTrips">0</b>
+            </div>
+
+            <div class="result-item">
+                🛣️ Total Distance<br>
+                <b id="totalDistance">0 KM</b>
+            </div>
+
+            <div class="result-item">
+                ⛽ Total Fuel<br>
+                <b id="totalFuel">0 L</b>
+            </div>
+
+            <div class="result-item">
+                💰 Total Estimated Cost<br>
+                <b id="totalCost">₹0</b>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 <div class="card">
 
@@ -644,6 +779,9 @@ footer p{
 
 </div>
 
+<div id="notification"
+     class="notification">
+</div>
 
 <footer>
 
@@ -655,11 +793,10 @@ footer p{
 
 </footer>
 
-
 <script>
 
 /* =====================================================
-   COMPLETE VEHICLE DATABASE
+   VEHICLE DATABASE
 ===================================================== */
 
 const vehicles = {
@@ -684,10 +821,6 @@ const vehicles = {
 "NX500":{brand:"Honda",type:"Bike",mileage:27},
 "CB350":{brand:"Honda",type:"Bike",mileage:35},
 "CB350RS":{brand:"Honda",type:"Bike",mileage:35},
-"CB350C":{brand:"Honda",type:"Bike",mileage:35},
-"H'ness CB350":{brand:"Honda",type:"Bike",mileage:35},
-"CB650R":{brand:"Honda",type:"Bike",mileage:20},
-"CBR650R":{brand:"Honda",type:"Bike",mileage:20},
 
 "Raider 125":{brand:"TVS",type:"Bike",mileage:56},
 "Apache RTR 160":{brand:"TVS",type:"Bike",mileage:47},
@@ -698,8 +831,6 @@ const vehicles = {
 "Ronin":{brand:"TVS",type:"Bike",mileage:42},
 "Radeon":{brand:"TVS",type:"Bike",mileage:65},
 "Sport":{brand:"TVS",type:"Bike",mileage:70},
-"Star City Plus":{brand:"TVS",type:"Bike",mileage:68},
-"XL100":{brand:"TVS",type:"Moped",mileage:65},
 
 "Pulsar 125":{brand:"Bajaj",type:"Bike",mileage:50},
 "Pulsar 150":{brand:"Bajaj",type:"Bike",mileage:47},
@@ -709,61 +840,38 @@ const vehicles = {
 "Pulsar NS160":{brand:"Bajaj",type:"Bike",mileage:40},
 "Pulsar NS200":{brand:"Bajaj",type:"Bike",mileage:40},
 "Pulsar NS400Z":{brand:"Bajaj",type:"Bike",mileage:34},
-"Pulsar RS200":{brand:"Bajaj",type:"Bike",mileage:35},
 "Dominar 250":{brand:"Bajaj",type:"Bike",mileage:35},
 "Dominar 400":{brand:"Bajaj",type:"Bike",mileage:30},
-"Avenger 160":{brand:"Bajaj",type:"Bike",mileage:45},
-"Avenger 220":{brand:"Bajaj",type:"Bike",mileage:40},
 
 "Hunter 350":{brand:"Royal Enfield",type:"Bike",mileage:36},
 "Classic 350":{brand:"Royal Enfield",type:"Bike",mileage:35},
 "Bullet 350":{brand:"Royal Enfield",type:"Bike",mileage:35},
 "Meteor 350":{brand:"Royal Enfield",type:"Bike",mileage:35},
-"Guerrilla 450":{brand:"Royal Enfield",type:"Bike",mileage:30},
 "Himalayan 450":{brand:"Royal Enfield",type:"Bike",mileage:30},
-"Scram 440":{brand:"Royal Enfield",type:"Bike",mileage:30},
 "Interceptor 650":{brand:"Royal Enfield",type:"Bike",mileage:25},
-"Continental GT 650":{brand:"Royal Enfield",type:"Bike",mileage:25},
-"Super Meteor 650":{brand:"Royal Enfield",type:"Bike",mileage:23},
-"Shotgun 650":{brand:"Royal Enfield",type:"Bike",mileage:23},
-"Classic 650":{brand:"Royal Enfield",type:"Bike",mileage:23},
 
 "FZ-FI":{brand:"Yamaha",type:"Bike",mileage:45},
 "FZ-S FI":{brand:"Yamaha",type:"Bike",mileage:45},
-"FZ-X":{brand:"Yamaha",type:"Bike",mileage:45},
 "MT-15":{brand:"Yamaha",type:"Bike",mileage:48},
 "R15":{brand:"Yamaha",type:"Bike",mileage:45},
 "R15 V4":{brand:"Yamaha",type:"Bike",mileage:45},
 "R3":{brand:"Yamaha",type:"Bike",mileage:25},
-"R7":{brand:"Yamaha",type:"Bike",mileage:20},
-"Tenere 700":{brand:"Yamaha",type:"Bike",mileage:20},
 
 "KTM 125 Duke":{brand:"KTM",type:"Bike",mileage:40},
-"KTM 160 Duke":{brand:"KTM",type:"Bike",mileage:45},
 "KTM 200 Duke":{brand:"KTM",type:"Bike",mileage:35},
 "KTM 250 Duke":{brand:"KTM",type:"Bike",mileage:30},
 "KTM 390 Duke":{brand:"KTM",type:"Bike",mileage:28},
-"KTM 390 Adventure":{brand:"KTM",type:"Bike",mileage:28},
-"KTM RC 200":{brand:"KTM",type:"Bike",mileage:35},
-"KTM RC 390":{brand:"KTM",type:"Bike",mileage:28},
-"Husqvarna Svartpilen 125":{brand:"Husqvarna",type:"Bike",mileage:40},
-"Husqvarna Svartpilen 250":{brand:"Husqvarna",type:"Bike",mileage:32},
 
 "Activa":{brand:"Honda",type:"Scooter",mileage:47},
 "Activa 125":{brand:"Honda",type:"Scooter",mileage:47},
 "Activa e":{brand:"Honda",type:"Electric Scooter",mileage:0,electric:true},
 "Dio":{brand:"Honda",type:"Scooter",mileage:50},
 "Dio 125":{brand:"Honda",type:"Scooter",mileage:48},
-"QC3":{brand:"Honda",type:"Scooter",mileage:45},
 
 "Jupiter":{brand:"TVS",type:"Scooter",mileage:50},
 "Jupiter 125":{brand:"TVS",type:"Scooter",mileage:48},
 "NTORQ 125":{brand:"TVS",type:"Scooter",mileage:45},
-"NTORQ 150":{brand:"TVS",type:"Scooter",mileage:45},
 "iQube":{brand:"TVS",type:"Electric Scooter",mileage:0,electric:true},
-"Orbiter":{brand:"TVS",type:"Electric Scooter",mileage:0,electric:true},
-"Zest 110":{brand:"TVS",type:"Scooter",mileage:50},
-"Scooty Pep Plus":{brand:"TVS",type:"Scooter",mileage:50},
 
 "Access 125":{brand:"Suzuki",type:"Scooter",mileage:45},
 "Burgman Street":{brand:"Suzuki",type:"Scooter",mileage:45},
@@ -772,29 +880,15 @@ const vehicles = {
 "RayZR 125 Fi Hybrid":{brand:"Yamaha",type:"Scooter",mileage:50},
 "Fascino 125 Fi Hybrid":{brand:"Yamaha",type:"Scooter",mileage:50},
 "Aerox 155":{brand:"Yamaha",type:"Scooter",mileage:40},
-"Aerox 155 Version S":{brand:"Yamaha",type:"Scooter",mileage:40},
 
 "Pleasure+":{brand:"Hero",type:"Scooter",mileage:50},
 "Destini 125":{brand:"Hero",type:"Scooter",mileage:45},
 "Xoom":{brand:"Hero",type:"Scooter",mileage:50},
-"Xoom 110":{brand:"Hero",type:"Scooter",mileage:50},
-"Xoom 125":{brand:"Hero",type:"Scooter",mileage:45},
 
 "Chetak":{brand:"Bajaj",type:"Electric Scooter",mileage:0,electric:true},
-"Chetak 3001":{brand:"Bajaj",type:"Electric Scooter",mileage:0,electric:true},
-
 "Ola S1":{brand:"Ola Electric",type:"Electric Scooter",mileage:0,electric:true},
 "Ola S1 Pro":{brand:"Ola Electric",type:"Electric Scooter",mileage:0,electric:true},
-"Ola S1X":{brand:"Ola Electric",type:"Electric Scooter",mileage:0,electric:true},
 "Ather 450X":{brand:"Ather",type:"Electric Scooter",mileage:0,electric:true},
-"Ather 450S":{brand:"Ather",type:"Electric Scooter",mileage:0,electric:true},
-"Vida VX2":{brand:"Vida",type:"Electric Scooter",mileage:0,electric:true},
-"Vida V2":{brand:"Vida",type:"Electric Scooter",mileage:0,electric:true},
-"Ampere Magnus":{brand:"Ampere",type:"Electric Scooter",mileage:0,electric:true},
-"Ampere Nexus":{brand:"Ampere",type:"Electric Scooter",mileage:0,electric:true},
-"River Indie":{brand:"River",type:"Electric Scooter",mileage:0,electric:true},
-"Okinawa PraisePro":{brand:"Okinawa",type:"Electric Scooter",mileage:0,electric:true},
-"Okinawa Okhi90":{brand:"Okinawa",type:"Electric Scooter",mileage:0,electric:true},
 
 "Alto K10":{brand:"Maruti Suzuki",type:"Car",mileage:24},
 "S-Presso":{brand:"Maruti Suzuki",type:"Car",mileage:25},
@@ -803,109 +897,67 @@ const vehicles = {
 "Swift":{brand:"Maruti Suzuki",type:"Car",mileage:25},
 "Dzire":{brand:"Maruti Suzuki",type:"Car",mileage:24},
 "Baleno":{brand:"Maruti Suzuki",type:"Car",mileage:23},
-"Fronx":{brand:"Maruti Suzuki",type:"Car",mileage:22},
-"Ignis":{brand:"Maruti Suzuki",type:"Car",mileage:21},
 "Brezza":{brand:"Maruti Suzuki",type:"Car",mileage:19},
 "Ertiga":{brand:"Maruti Suzuki",type:"Car",mileage:20},
-"XL6":{brand:"Maruti Suzuki",type:"Car",mileage:20},
 "Grand Vitara":{brand:"Maruti Suzuki",type:"Car",mileage:21},
-"Invicto":{brand:"Maruti Suzuki",type:"Car",mileage:23},
-"Jimny":{brand:"Maruti Suzuki",type:"Car",mileage:16},
 "e Vitara":{brand:"Maruti Suzuki",type:"Electric Car",mileage:0,electric:true},
 
 "Grand i10 Nios":{brand:"Hyundai",type:"Car",mileage:20},
 "i20":{brand:"Hyundai",type:"Car",mileage:20},
-"Aura":{brand:"Hyundai",type:"Car",mileage:20},
-"Exter":{brand:"Hyundai",type:"Car",mileage:20},
 "Venue":{brand:"Hyundai",type:"Car",mileage:18},
 "Creta":{brand:"Hyundai",type:"Car",mileage:18},
-"Alcazar":{brand:"Hyundai",type:"Car",mileage:17},
 "Verna":{brand:"Hyundai",type:"Car",mileage:19},
-"Tucson":{brand:"Hyundai",type:"Car",mileage:16},
 "Ioniq 5":{brand:"Hyundai",type:"Electric Car",mileage:0,electric:true},
-"Creta Electric":{brand:"Hyundai",type:"Electric Car",mileage:0,electric:true},
-"Inster":{brand:"Hyundai",type:"Electric Car",mileage:0,electric:true},
 
 "Tiago":{brand:"Tata",type:"Car",mileage:20},
 "Tiago EV":{brand:"Tata",type:"Electric Car",mileage:0,electric:true},
-"Tigor":{brand:"Tata",type:"Car",mileage:20},
-"Tigor EV":{brand:"Tata",type:"Electric Car",mileage:0,electric:true},
 "Altroz":{brand:"Tata",type:"Car",mileage:19},
 "Punch":{brand:"Tata",type:"Car",mileage:19},
 "Punch EV":{brand:"Tata",type:"Electric Car",mileage:0,electric:true},
 "Nexon":{brand:"Tata",type:"Car",mileage:17},
 "Nexon EV":{brand:"Tata",type:"Electric Car",mileage:0,electric:true},
-"Curvv":{brand:"Tata",type:"Car",mileage:18},
-"Curvv EV":{brand:"Tata",type:"Electric Car",mileage:0,electric:true},
 "Harrier":{brand:"Tata",type:"Car",mileage:16},
-"Harrier EV":{brand:"Tata",type:"Electric Car",mileage:0,electric:true},
 "Safari":{brand:"Tata",type:"Car",mileage:16},
-"Sierra":{brand:"Tata",type:"Car",mileage:0},
 
 "Bolero":{brand:"Mahindra",type:"Car",mileage:16},
-"Bolero Neo":{brand:"Mahindra",type:"Car",mileage:17},
 "Scorpio":{brand:"Mahindra",type:"Car",mileage:15},
 "Scorpio-N":{brand:"Mahindra",type:"Car",mileage:14},
 "Thar":{brand:"Mahindra",type:"Car",mileage:15},
-"Thar Roxx":{brand:"Mahindra",type:"Car",mileage:15},
-"Marazzo":{brand:"Mahindra",type:"Car",mileage:17},
-"XUV 3XO":{brand:"Mahindra",type:"Car",mileage:18},
 "XUV700":{brand:"Mahindra",type:"Car",mileage:16},
 "BE 6":{brand:"Mahindra",type:"Electric Car",mileage:0,electric:true},
-"XEV 9e":{brand:"Mahindra",type:"Electric Car",mileage:0,electric:true},
-"XEV 9S":{brand:"Mahindra",type:"Electric Car",mileage:0,electric:true},
 
 "Glanza":{brand:"Toyota",type:"Car",mileage:23},
-"Taisor":{brand:"Toyota",type:"Car",mileage:22},
-"Urban Cruiser Hyryder":{brand:"Toyota",type:"Car",mileage:21},
 "Innova Crysta":{brand:"Toyota",type:"Car",mileage:15},
 "Innova Hycross":{brand:"Toyota",type:"Car",mileage:21},
 "Fortuner":{brand:"Toyota",type:"Car",mileage:14},
-"Hilux":{brand:"Toyota",type:"Car",mileage:13},
 "Camry":{brand:"Toyota",type:"Car",mileage:19},
-"Vellfire":{brand:"Toyota",type:"Car",mileage:16},
-"Land Cruiser 300":{brand:"Toyota",type:"Car",mileage:10},
 
 "Sonet":{brand:"Kia",type:"Car",mileage:19},
 "Seltos":{brand:"Kia",type:"Car",mileage:17},
 "Carens":{brand:"Kia",type:"Car",mileage:16},
-"Carens Clavis":{brand:"Kia",type:"Car",mileage:16},
-"Carnival":{brand:"Kia",type:"Car",mileage:14},
 "EV6":{brand:"Kia",type:"Electric Car",mileage:0,electric:true},
-"EV9":{brand:"Kia",type:"Electric Car",mileage:0,electric:true},
 
 "Amaze":{brand:"Honda",type:"Car",mileage:19},
 "City":{brand:"Honda",type:"Car",mileage:18},
-"Elevate":{brand:"Honda",type:"Car",mileage:16},
-
-"Taigun":{brand:"Volkswagen",type:"Car",mileage:18},
-"Virtus":{brand:"Volkswagen",type:"Car",mileage:18},
-"Tiguan":{brand:"Volkswagen",type:"Car",mileage:12},
-
-"Kylaq":{brand:"Skoda",type:"Car",mileage:19},
-"Kushaq":{brand:"Skoda",type:"Car",mileage:18},
-"Slavia":{brand:"Skoda",type:"Car",mileage:19},
-"Kodiaq":{brand:"Skoda",type:"Car",mileage:13}
+"Elevate":{brand:"Honda",type:"Car",mileage:16}
 
 };
 
 
 /* =====================================================
-   CREATE VEHICLE DROPDOWN AUTOMATICALLY
+   LOAD VEHICLES
 ===================================================== */
 
 function loadVehicles(){
 
-    const select =
-        document.getElementById("vehicle");
-
-    const groups = {};
+    const select=document.getElementById("vehicle");
+    const groups={};
 
     Object.entries(vehicles).forEach(([name,data])=>{
 
         let groupName;
 
-        if(data.type==="Bike" || data.type==="Moped"){
+        if(data.type==="Bike"){
             groupName="🏍️ Bikes";
         }
         else if(
@@ -926,24 +978,20 @@ function loadVehicles(){
 
     });
 
-
     Object.entries(groups).forEach(([group,names])=>{
 
-        const optgroup =
-            document.createElement("optgroup");
+        const optgroup=document.createElement("optgroup");
 
         optgroup.label=group;
 
         names.sort().forEach(name=>{
 
-            const option =
-                document.createElement("option");
+            const option=document.createElement("option");
 
             option.value=name;
 
-            option.textContent =
-                name + " — " +
-                vehicles[name].brand;
+            option.textContent=
+                name+" — "+vehicles[name].brand;
 
             optgroup.appendChild(option);
 
@@ -966,28 +1014,39 @@ function selectTrip(type){
 
     tripType=type;
 
-    document
-    .getElementById("oneWay")
-    .classList.remove("active");
+    document.getElementById("oneWay")
+        .classList.remove("active");
 
-    document
-    .getElementById("roundTrip")
-    .classList.remove("active");
+    document.getElementById("roundTrip")
+        .classList.remove("active");
 
     if(type==="one"){
 
-        document
-        .getElementById("oneWay")
-        .classList.add("active");
+        document.getElementById("oneWay")
+            .classList.add("active");
 
     }
     else{
 
-        document
-        .getElementById("roundTrip")
-        .classList.add("active");
+        document.getElementById("roundTrip")
+            .classList.add("active");
 
     }
+
+}
+
+
+/* =====================================================
+   HTML ESCAPE
+===================================================== */
+
+function escapeHTML(text){
+
+    const div=document.createElement("div");
+
+    div.textContent=text;
+
+    return div.innerHTML;
 
 }
 
@@ -998,11 +1057,9 @@ function selectTrip(type){
 
 function showVehicleMileage(){
 
-    const name =
-        document.getElementById("vehicle").value;
+    const name=document.getElementById("vehicle").value;
 
-    const info =
-        document.getElementById("vehicleInfo");
+    const info=document.getElementById("vehicleInfo");
 
     if(!name){
 
@@ -1041,21 +1098,18 @@ function showVehicleMileage(){
 
 
 /* =====================================================
-   DISTANCE
+   DISTANCE CALCULATOR
 ===================================================== */
 
 async function showDistance(){
 
-    const from=
-        document.getElementById("from")
+    const from=document.getElementById("from")
         .value.trim();
 
-    const to=
-        document.getElementById("to")
+    const to=document.getElementById("to")
         .value.trim();
 
-    const result=
-        document.getElementById("distanceResult");
+    const result=document.getElementById("distanceResult");
 
     if(!from || !to){
 
@@ -1082,49 +1136,33 @@ async function showDistance(){
 
     try{
 
-        const fromResponse=
-            await fetch(
+        const fromResponse=await fetch(
             "https://nominatim.openstreetmap.org/search?format=json&limit=1&q="+
             encodeURIComponent(from)
-            );
+        );
 
-        if(!fromResponse.ok)
-            throw new Error();
-
-        const fromData=
-            await fromResponse.json();
+        const fromData=await fromResponse.json();
 
         if(!fromData.length)
-            throw new Error("Starting location not found");
-
-
-        const toResponse=
-            await fetch(
-            "https://nominatim.openstreetmap.org/search?format=json&limit=1&q="+
-            encodeURIComponent(to)
-            );
-
-        if(!toResponse.ok)
             throw new Error();
 
-        const toData=
-            await toResponse.json();
+
+        const toResponse=await fetch(
+            "https://nominatim.openstreetmap.org/search?format=json&limit=1&q="+
+            encodeURIComponent(to)
+        );
+
+        const toData=await toResponse.json();
 
         if(!toData.length)
-            throw new Error("Destination not found");
+            throw new Error();
 
 
-        const fromLat=
-            parseFloat(fromData[0].lat);
+        const fromLat=parseFloat(fromData[0].lat);
+        const fromLon=parseFloat(fromData[0].lon);
 
-        const fromLon=
-            parseFloat(fromData[0].lon);
-
-        const toLat=
-            parseFloat(toData[0].lat);
-
-        const toLon=
-            parseFloat(toData[0].lon);
+        const toLat=parseFloat(toData[0].lat);
+        const toLon=parseFloat(toData[0].lon);
 
 
         const routeURL=
@@ -1134,32 +1172,25 @@ async function showDistance(){
             "?overview=false";
 
 
-        const routeResponse=
-            await fetch(routeURL);
+        const routeResponse=await fetch(routeURL);
 
-        if(!routeResponse.ok)
+        const routeData=await routeResponse.json();
+
+        if(
+            !routeData.routes ||
+            !routeData.routes.length
+        ){
             throw new Error();
-
-
-        const routeData=
-            await routeResponse.json();
-
-        if(!routeData.routes ||
-           !routeData.routes.length)
-            throw new Error();
+        }
 
 
         const oneWayDistance=
             routeData.routes[0].distance/1000;
 
-
-        let finalDistance=
-            oneWayDistance;
-
+        let finalDistance=oneWayDistance;
 
         if(tripType==="round"){
-            finalDistance=
-                oneWayDistance*2;
+            finalDistance=oneWayDistance*2;
         }
 
 
@@ -1237,17 +1268,435 @@ async function showDistance(){
 
 
 /* =====================================================
-   HTML ESCAPE
+   GOOGLE MAPS
+   UPDATED: OPENS IN NEW TAB
 ===================================================== */
 
-function escapeHTML(text){
+function openRoute(){
 
-    const div=
-        document.createElement("div");
+    const from=document.getElementById("from")
+        .value.trim();
 
-    div.textContent=text;
+    const to=document.getElementById("to")
+        .value.trim();
 
-    return div.innerHTML;
+    if(!from || !to){
+
+        showNotification(
+            "⚠️ Please enter Starting Location and Destination."
+        );
+
+        return;
+    }
+
+    const mapsURL=
+        "https://www.google.com/maps/dir/?api=1"+
+        "&origin="+encodeURIComponent(from)+
+        "&destination="+encodeURIComponent(to)+
+        "&travelmode=driving";
+
+    /*
+       IMPORTANT:
+       Google Maps opens in a NEW TAB.
+       Your Travel Fuel Assistant stays open.
+    */
+
+    window.open(mapsURL,"_blank");
+
+    showNotification(
+        "🗺️ Google Maps opened in a new tab!"
+    );
+
+}
+
+
+/* =====================================================
+   NOTIFICATION
+===================================================== */
+
+function showNotification(message){
+
+    const notification=
+        document.getElementById("notification");
+
+    notification.innerText=message;
+
+    notification.style.display="block";
+
+    setTimeout(function(){
+
+        notification.style.display="none";
+
+    },3000);
+
+}
+
+
+/* =====================================================
+   FAVOURITE VEHICLE
+===================================================== */
+
+function saveFavouriteVehicle(){
+
+    const vehicle=
+        document.getElementById("vehicle").value;
+
+    if(!vehicle){
+
+        showNotification(
+            "⚠️ Please select a vehicle first."
+        );
+
+        return;
+    }
+
+    localStorage.setItem(
+        "favouriteVehicle",
+        vehicle
+    );
+
+    showFavouriteVehicle();
+
+    showNotification(
+        "⭐ Favourite vehicle saved!"
+    );
+
+}
+
+
+function showFavouriteVehicle(){
+
+    const favourite=
+        localStorage.getItem(
+            "favouriteVehicle"
+        );
+
+    const box=
+        document.getElementById(
+            "favouriteBox"
+        );
+
+    if(!favourite){
+
+        box.style.display="none";
+
+        return;
+    }
+
+    box.style.display="block";
+
+    box.innerHTML=`
+        ⭐ Favourite Vehicle:
+        <b>${escapeHTML(favourite)}</b>
+
+        <br>
+
+        <button
+        style="
+        width:auto;
+        margin-top:10px;
+        padding:8px 12px;
+        "
+        onclick="useFavouriteVehicle()">
+
+        Use Favourite
+
+        </button>
+    `;
+
+}
+
+
+function useFavouriteVehicle(){
+
+    const favourite=
+        localStorage.getItem(
+            "favouriteVehicle"
+        );
+
+    if(!favourite) return;
+
+    document.getElementById(
+        "vehicle"
+    ).value=favourite;
+
+    showVehicleMileage();
+
+    showNotification(
+        "🚗 Favourite vehicle selected!"
+    );
+
+}
+
+
+/* =====================================================
+   TRIP HISTORY
+===================================================== */
+
+function saveTripHistory(
+    vehicle,
+    distance,
+    fuel,
+    cost
+){
+
+    let history=
+        JSON.parse(
+            localStorage.getItem(
+                "tripHistory"
+            )
+        ) || [];
+
+    history.unshift({
+
+        vehicle:vehicle,
+        distance:distance,
+        fuel:fuel,
+        cost:cost,
+        date:new Date().toLocaleString()
+
+    });
+
+    history=history.slice(0,10);
+
+    localStorage.setItem(
+        "tripHistory",
+        JSON.stringify(history)
+    );
+
+    updateTripHistory();
+
+}
+
+
+function updateTripHistory(){
+
+    const history=
+        JSON.parse(
+            localStorage.getItem(
+                "tripHistory"
+            )
+        ) || [];
+
+    const container=
+        document.getElementById(
+            "tripHistory"
+        );
+
+    if(history.length===0){
+
+        container.innerHTML=`
+            <div class="map-info">
+                No trips calculated yet.
+            </div>
+        `;
+
+        updateTravelSummary();
+
+        return;
+    }
+
+    container.innerHTML="";
+
+    history.forEach(function(trip){
+
+        container.innerHTML+=`
+
+            <div class="history-item">
+
+                <b>
+                🚗 ${escapeHTML(trip.vehicle)}
+                </b>
+
+                <br>
+
+                🛣️ ${Number(trip.distance).toFixed(1)} KM
+
+                <br>
+
+                ⛽ ${Number(trip.fuel).toFixed(2)} L
+
+                <br>
+
+                💰 ₹${Number(trip.cost).toFixed(2)}
+
+                <br>
+
+                <small>
+                ${escapeHTML(trip.date)}
+                </small>
+
+            </div>
+
+        `;
+
+    });
+
+    updateTravelSummary();
+
+}
+
+
+function clearHistory(){
+
+    localStorage.removeItem(
+        "tripHistory"
+    );
+
+    updateTripHistory();
+
+    showNotification(
+        "🗑️ Trip history cleared."
+    );
+
+}
+
+
+/* =====================================================
+   TRAVEL SUMMARY
+===================================================== */
+
+function updateTravelSummary(){
+
+    const history=
+        JSON.parse(
+            localStorage.getItem(
+                "tripHistory"
+            )
+        ) || [];
+
+    let totalDistance=0;
+    let totalFuel=0;
+    let totalCost=0;
+
+    history.forEach(function(trip){
+
+        totalDistance+=
+            Number(trip.distance);
+
+        totalFuel+=
+            Number(trip.fuel);
+
+        totalCost+=
+            Number(trip.cost);
+
+    });
+
+    document.getElementById(
+        "totalTrips"
+    ).innerText=history.length;
+
+    document.getElementById(
+        "totalDistance"
+    ).innerText=
+        totalDistance.toFixed(1)+" KM";
+
+    document.getElementById(
+        "totalFuel"
+    ).innerText=
+        totalFuel.toFixed(2)+" L";
+
+    document.getElementById(
+        "totalCost"
+    ).innerText=
+        "₹"+totalCost.toFixed(2);
+
+}
+
+
+/* =====================================================
+   COPY RESULT
+===================================================== */
+
+function copyTripResult(){
+
+    const result=
+        document.getElementById("result");
+
+    if(
+        result.style.display==="none" ||
+        !result.innerText.trim()
+    ){
+
+        showNotification(
+            "⚠️ Calculate a trip first."
+        );
+
+        return;
+    }
+
+    navigator.clipboard
+    .writeText(result.innerText)
+    .then(function(){
+
+        showNotification(
+            "📋 Trip result copied!"
+        );
+
+    })
+    .catch(function(){
+
+        showNotification(
+            "❌ Unable to copy result."
+        );
+
+    });
+
+}
+
+
+/* =====================================================
+   SHARE TRIP
+===================================================== */
+
+function shareTrip(){
+
+    const result=
+        document.getElementById("result");
+
+    if(
+        result.style.display==="none" ||
+        !result.innerText.trim()
+    ){
+
+        showNotification(
+            "⚠️ Calculate a trip first."
+        );
+
+        return;
+    }
+
+    const text=
+        "🚗 Travel Fuel Assistant\n\n"+
+        result.innerText;
+
+    if(navigator.share){
+
+        navigator.share({
+
+            title:
+            "My Travel Fuel Estimate",
+
+            text:text
+
+        })
+        .catch(function(error){
+
+            console.log(error);
+
+        });
+
+    }
+    else{
+
+        navigator.clipboard
+        .writeText(text);
+
+        showNotification(
+            "📋 Share text copied!"
+        );
+
+    }
 
 }
 
@@ -1277,7 +1726,9 @@ function calculateTrip(){
 
     if(!vehicleName){
 
-        showError("⚠️ Please select your vehicle.");
+        showError(
+            "⚠️ Please select your vehicle."
+        );
 
         return;
     }
@@ -1285,7 +1736,9 @@ function calculateTrip(){
 
     if(!distance || distance<=0){
 
-        showError("⚠️ Please enter a valid trip distance.");
+        showError(
+            "⚠️ Please enter a valid trip distance."
+        );
 
         return;
     }
@@ -1293,7 +1746,9 @@ function calculateTrip(){
 
     if(!price || price<=0){
 
-        showError("⚠️ Please enter a valid fuel price.");
+        showError(
+            "⚠️ Please enter a valid fuel price."
+        );
 
         return;
     }
@@ -1301,8 +1756,6 @@ function calculateTrip(){
 
     const data=vehicles[vehicleName];
 
-
-    /* ELECTRIC VEHICLES */
 
     if(data.electric){
 
@@ -1359,8 +1812,15 @@ function calculateTrip(){
         fuelNeeded*price;
 
 
-    result.style.display="block";
+    saveTripHistory(
+        vehicleName,
+        distance,
+        fuelNeeded,
+        totalCost
+    );
 
+
+    result.style.display="block";
 
     result.innerHTML=`
 
@@ -1454,58 +1914,16 @@ function showError(message){
 
 
 /* =====================================================
-   GOOGLE MAPS
-===================================================== */
-
-function openRoute(){
-
-    const from=
-        document.getElementById("from")
-        .value.trim();
-
-    const to=
-        document.getElementById("to")
-        .value.trim();
-
-
-    if(!from || !to){
-
-        alert(
-            "Please enter Starting Location and Destination."
-        );
-
-        return;
-    }
-
-
-    const mapsURL=
-        "https://www.google.com/maps/dir/?api=1"+
-        "&origin="+encodeURIComponent(from)+
-        "&destination="+encodeURIComponent(to)+
-        "&travelmode=driving";
-
-
-    window.location.href=mapsURL;
-
-}
-
-
-/* =====================================================
    RESET
 ===================================================== */
 
 function resetCalculator(){
 
     document.getElementById("vehicle").value="";
-
     document.getElementById("distance").value="";
-
     document.getElementById("price").value="";
-
     document.getElementById("from").value="";
-
     document.getElementById("to").value="";
-
 
     document.getElementById("vehicleInfo")
     .style.display="none";
@@ -1517,6 +1935,10 @@ function resetCalculator(){
     .style.display="none";
 
     selectTrip("one");
+
+    showNotification(
+        "🔄 Calculator reset successfully!"
+    );
 
 }
 
@@ -1611,69 +2033,6 @@ vehicleFeature:"वाहन",
 fuelFeature:"ईंधन",
 mapFeature:"मैप",
 costFeature:"लागत"
-},
-
-ta:{
-title:"பயண எரிபொருள் உதவியாளர்",
-subtitle:"ஸ்மார்ட் பயண திட்டமிடல் மற்றும் எரிபொருள் செலவு மதிப்பீடு",
-vehicleHeading:"🚗 உங்கள் வாகனத்தை தேர்வு செய்யுங்கள்",
-vehicleLabel:"வாகனம்",
-tripHeading:"📍 உங்கள் பயணத்தை திட்டமிடுங்கள்",
-fromLabel:"தொடக்க இடம்",
-toLabel:"சேருமிடம்",
-distanceButton:"📏 தூரத்தைக் காட்டு",
-routeButton:"🗺️ Google Maps வழியை திறக்கவும்",
-calculatorHeading:"⛽ பயண எரிபொருள் கணிப்பான்",
-distanceLabel:"பயண தூரம் (KM)",
-priceLabel:"ஒரு லிட்டர் எரிபொருள் விலை (₹)",
-calculateButton:"எனது பயணத்தை கணக்கிடுங்கள்",
-resetButton:"🔄 மீட்டமை",
-vehicleFeature:"வாகனம்",
-fuelFeature:"எரிபொருள்",
-mapFeature:"வரைபடம்",
-costFeature:"செலவு"
-},
-
-kn:{
-title:"ಪ್ರಯಾಣ ಇಂಧನ ಸಹಾಯಕ",
-subtitle:"ಸ್ಮಾರ್ಟ್ ಪ್ರಯಾಣ ಯೋಜನೆ ಮತ್ತು ಇಂಧನ ವೆಚ್ಚ ಅಂದಾಜು",
-vehicleHeading:"🚗 ನಿಮ್ಮ ವಾಹನವನ್ನು ಆಯ್ಕೆಮಾಡಿ",
-vehicleLabel:"ವಾಹನ",
-tripHeading:"📍 ನಿಮ್ಮ ಪ್ರಯಾಣವನ್ನು ಯೋಜಿಸಿ",
-fromLabel:"ಪ್ರಾರಂಭದ ಸ್ಥಳ",
-toLabel:"ಗಮ್ಯಸ್ಥಾನ",
-distanceButton:"📏 ದೂರವನ್ನು ತೋರಿಸಿ",
-routeButton:"🗺️ Google Maps ಮಾರ್ಗ ತೆರೆಯಿರಿ",
-calculatorHeading:"⛽ ಪ್ರಯಾಣ ಇಂಧನ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
-distanceLabel:"ಪ್ರಯಾಣದ ದೂರ (KM)",
-priceLabel:"ಪ್ರತಿ ಲೀಟರ್ ಇಂಧನ ಬೆಲೆ (₹)",
-calculateButton:"ನನ್ನ ಪ್ರಯಾಣವನ್ನು ಲೆಕ್ಕಿಸಿ",
-resetButton:"🔄 ಮರುಹೊಂದಿಸಿ",
-vehicleFeature:"ವಾಹನ",
-fuelFeature:"ಇಂಧನ",
-mapFeature:"ನಕ್ಷೆ",
-costFeature:"ವೆಚ್ಚ"
-},
-
-ml:{
-title:"യാത്ര ഇന്ധന സഹായി",
-subtitle:"സ്മാർട്ട് യാത്രാ ആസൂത്രണവും ഇന്ധന ചെലവ് കണക്കാക്കലും",
-vehicleHeading:"🚗 നിങ്ങളുടെ വാഹനം തിരഞ്ഞെടുക്കുക",
-vehicleLabel:"വാഹനം",
-tripHeading:"📍 നിങ്ങളുടെ യാത്ര ആസൂത്രണം ചെയ്യുക",
-fromLabel:"തുടക്ക സ്ഥലം",
-toLabel:"ലക്ഷ്യസ്ഥാനം",
-distanceButton:"📏 ദൂരം കാണിക്കുക",
-routeButton:"🗺️ Google Maps റൂട്ട് തുറക്കുക",
-calculatorHeading:"⛽ യാത്രാ ഇന്ധന കാൽക്കുലേറ്റർ",
-distanceLabel:"യാത്രാ ദൂരം (KM)",
-priceLabel:"ഒരു ലിറ്റർ ഇന്ധന വില (₹)",
-calculateButton:"എന്റെ യാത്ര കണക്കാക്കുക",
-resetButton:"🔄 റീസെറ്റ്",
-vehicleFeature:"വാഹനം",
-fuelFeature:"ഇന്ധനം",
-mapFeature:"മാപ്പ്",
-costFeature:"ചെലവ്"
 }
 
 };
@@ -1691,7 +2050,6 @@ function changeLanguage(){
     const t=translations[lang];
 
     if(!t)return;
-
 
     document.getElementById("title").innerText=t.title;
     document.getElementById("subtitle").innerText=t.subtitle;
@@ -1719,85 +2077,99 @@ function changeLanguage(){
    ENTER KEY
 ===================================================== */
 
-document.addEventListener("keydown",function(event){
+document.addEventListener(
+    "keydown",
+    function(event){
 
-    if(event.key==="Enter"){
+        if(event.key==="Enter"){
 
-        const active=
-            document.activeElement;
+            const active=
+                document.activeElement;
 
-        if(active &&
-           (
-            active.id==="distance" ||
-            active.id==="price"
-           )){
+            if(
+                active &&
+                (
+                    active.id==="distance" ||
+                    active.id==="price"
+                )
+            ){
 
-            calculateTrip();
+                calculateTrip();
+
+            }
 
         }
 
     }
-
-});
+);
 
 
 /* =====================================================
    PAGE LOAD
 ===================================================== */
 
-window.addEventListener("load",function(){
+window.addEventListener(
+    "load",
+    function(){
 
-    loadVehicles();
+        loadVehicles();
+
+        const savedVehicle=
+            localStorage.getItem("lastVehicle");
+
+        const savedDistance=
+            localStorage.getItem("lastDistance");
+
+        const savedPrice=
+            localStorage.getItem("lastPrice");
 
 
-    const savedVehicle=
-        localStorage.getItem("lastVehicle");
+        if(savedVehicle){
 
-    const savedDistance=
-        localStorage.getItem("lastDistance");
+            document.getElementById("vehicle")
+            .value=savedVehicle;
 
-    const savedPrice=
-        localStorage.getItem("lastPrice");
+            showVehicleMileage();
+
+        }
 
 
-    if(savedVehicle){
+        if(savedDistance){
 
-        document.getElementById("vehicle").value=
-            savedVehicle;
+            document.getElementById("distance")
+            .value=savedDistance;
 
-        showVehicleMileage();
+        }
+
+
+        if(savedPrice){
+
+            document.getElementById("price")
+            .value=savedPrice;
+
+        }
+
+
+        if(
+            localStorage.getItem("darkMode")
+            ==="true"
+        ){
+
+            document.body
+            .classList.add("dark");
+
+            document.getElementById("darkButton")
+            .innerText="☀️";
+
+        }
+
+
+        showFavouriteVehicle();
+
+        updateTripHistory();
 
     }
-
-
-    if(savedDistance){
-
-        document.getElementById("distance").value=
-            savedDistance;
-
-    }
-
-
-    if(savedPrice){
-
-        document.getElementById("price").value=
-            savedPrice;
-
-    }
-
-
-    if(
-        localStorage.getItem("darkMode")==="true"
-    ){
-
-        document.body.classList.add("dark");
-
-        document.getElementById("darkButton")
-        .innerText="☀️";
-
-    }
-
-});
+);
 
 </script>
 
