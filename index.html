@@ -430,12 +430,276 @@ footer p{
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
 <style>
 .location-wrap{position:relative}.location-suggestions{position:absolute;left:0;right:0;top:100%;margin-top:5px;background:var(--card);border:1px solid var(--border);border-radius:10px;box-shadow:0 8px 22px rgba(0,0,0,.12);z-index:5000;overflow:hidden;display:none}.location-suggestion{padding:12px 14px;cursor:pointer;border-bottom:1px solid var(--border);line-height:1.4}.location-suggestion:last-child{border-bottom:none}.location-suggestion:hover{background:rgba(37,99,235,.08)}.location-suggestion small{display:block;color:var(--muted);font-size:12px;margin-top:3px}.route-panel{display:none;margin-top:20px}.route-panel.show{display:block}.route-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:15px}.route-stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center}.route-stat .route-icon{font-size:22px;margin-bottom:5px}.route-stat b{font-size:17px}#routeMap{height:390px;border-radius:15px;border:1px solid var(--border);overflow:hidden;z-index:1}.route-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px}.route-actions button{margin-top:0}.maps-btn{background:#16a34a}.route-note{margin-top:12px;padding:12px 14px;border-radius:10px;background:rgba(37,99,235,.07);color:var(--muted);font-size:13px;line-height:1.6}.route-error{color:var(--danger);font-weight:bold;padding:12px 0}@media(max-width:800px){.route-summary{grid-template-columns:1fr 1fr}}@media(max-width:500px){.route-actions{grid-template-columns:1fr}#routeMap{height:300px}}
+/* =====================================================
+   FIRST-TIME USER GUIDE
+===================================================== */
+
+.guide-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,.65);
+    backdrop-filter:blur(4px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:10000;
+}
+
+.guide-overlay.show{
+    display:flex;
+}
+
+.guide-card{
+    width:100%;
+    max-width:520px;
+    max-height:90vh;
+    overflow-y:auto;
+    background:var(--card);
+    color:var(--text);
+    border-radius:22px;
+    padding:28px;
+    box-shadow:0 20px 60px rgba(0,0,0,.3);
+    animation:guideIn .25s ease;
+}
+
+@keyframes guideIn{
+    from{
+        opacity:0;
+        transform:translateY(20px) scale(.97);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0) scale(1);
+    }
+}
+
+.guide-header{
+    text-align:center;
+    margin-bottom:22px;
+}
+
+.guide-header .guide-icon{
+    font-size:48px;
+    margin-bottom:8px;
+}
+
+.guide-header h2{
+    color:var(--primary);
+    margin-bottom:7px;
+}
+
+.guide-header p{
+    color:var(--muted);
+    line-height:1.5;
+}
+
+.guide-step{
+    display:flex;
+    gap:14px;
+    align-items:flex-start;
+    padding:13px 0;
+    border-bottom:1px solid var(--border);
+}
+
+.guide-step:last-child{
+    border-bottom:none;
+}
+
+.guide-number{
+    min-width:34px;
+    height:34px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:var(--primary);
+    color:white;
+    font-weight:bold;
+}
+
+.guide-step-content{
+    line-height:1.5;
+}
+
+.guide-step-content b{
+    display:block;
+    margin-bottom:2px;
+}
+
+.guide-step-content span{
+    color:var(--muted);
+    font-size:14px;
+}
+
+.guide-buttons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:20px;
+}
+
+.guide-buttons button{
+    margin-top:0;
+}
+
+.guide-help-btn{
+    width:auto;
+    margin:0;
+    padding:10px 14px;
+    background:#7c3aed;
+    border-radius:9px;
+}
+
+@media(max-width:600px){
+
+    .guide-card{
+        padding:22px;
+        border-radius:18px;
+    }
+
+    .guide-buttons{
+        grid-template-columns:1fr;
+    }
+
+    .guide-help-btn{
+        width:100%;
+    }
+}
 </style>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 </head>
 
 <body>
+<!-- =====================================================
+     FIRST-TIME USER GUIDE
+===================================================== -->
 
+<div class="guide-overlay" id="guideOverlay">
+
+    <div class="guide-card">
+
+        <div class="guide-header">
+
+            <div class="guide-icon">🚗</div>
+
+            <h2 id="guideTitle">
+                Welcome to Travel Fuel Assistant
+            </h2>
+
+            <p id="guideSubtitle">
+                New here? Follow these simple steps to plan your trip.
+            </p>
+
+        </div>
+
+        <div class="guide-step">
+
+            <div class="guide-number">1</div>
+
+            <div class="guide-step-content">
+
+                <b>🚗 Select Your Vehicle</b>
+
+                <span>
+                    Choose your bike, scooter, car or electric vehicle
+                    from the vehicle list.
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="guide-step">
+
+            <div class="guide-number">2</div>
+
+            <div class="guide-step-content">
+
+                <b>📍 Enter Starting Location</b>
+
+                <span>
+                    Enter the place where your journey starts.
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="guide-step">
+
+            <div class="guide-number">3</div>
+
+            <div class="guide-step-content">
+
+                <b>🏁 Enter Destination</b>
+
+                <span>
+                    Enter the place you want to travel to.
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="guide-step">
+
+            <div class="guide-number">4</div>
+
+            <div class="guide-step-content">
+
+                <b>🗺️ Show Route & Map</b>
+
+                <span>
+                    Tap <b>Show Route & Map</b> to see distance,
+                    travel time, fuel required and estimated cost.
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="guide-step">
+
+            <div class="guide-number">5</div>
+
+            <div class="guide-step-content">
+
+                <b>📱 Open in Google Maps</b>
+
+                <span>
+                    When you're ready to travel, open the route
+                    directly in Google Maps for navigation.
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="guide-buttons">
+
+            <button
+                class="secondary-btn"
+                onclick="closeGuide()"
+                id="guideSkipButton">
+
+                Skip
+
+            </button>
+
+            <button
+                onclick="closeGuide()"
+                id="guideGotItButton">
+
+                🚀 Got it! Let's Start
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 <header>
     <h1>🚗 <span id="title">Travel Fuel Assistant</span></h1>
     <p id="subtitle">
@@ -445,9 +709,18 @@ footer p{
 
 <div class="top-bar">
 
-    <div>
-        <b>🌐 Travel Assistant</b>
-    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+    <b>🌐 Travel Assistant</b>
+
+    <button
+        class="guide-help-btn"
+        onclick="openGuide()"
+        id="howToUseButton">
+
+        ❓ How to Use
+
+    </button>
+</div>
 
     <div class="top-controls">
 
@@ -1825,6 +2098,57 @@ document.addEventListener(
     }
 );
 
+/* =====================================================
+   FIRST-TIME USER GUIDE
+===================================================== */
+
+function openGuide(){
+
+    document
+        .getElementById("guideOverlay")
+        .classList.add("show");
+
+}
+
+
+function closeGuide(){
+
+    document
+        .getElementById("guideOverlay")
+        .classList.remove("show");
+
+    localStorage.setItem(
+        "travelAssistantGuideSeen",
+        "true"
+    );
+
+}
+
+
+/* Close when clicking outside the guide card */
+
+document.addEventListener(
+    "click",
+    function(event){
+
+        const overlay =
+            document.getElementById("guideOverlay");
+
+        const card =
+            document.querySelector(".guide-card");
+
+        if(
+            overlay &&
+            overlay.classList.contains("show") &&
+            event.target === overlay
+        ){
+
+            closeGuide();
+
+        }
+
+    }
+);
 
 /* =====================================================
    PAGE LOAD
@@ -1833,6 +2157,21 @@ document.addEventListener(
 window.addEventListener(
     "load",
     function(){
+                /* Show guide automatically for first-time users */
+
+        if(
+            localStorage.getItem(
+                "travelAssistantGuideSeen"
+            ) !== "true"
+        ){
+
+            setTimeout(function(){
+
+                openGuide();
+
+            },700);
+
+        }
 
         loadVehicles();
         setupRouteListeners();
