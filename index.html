@@ -96,7 +96,7 @@ header p{
     padding:10px;
     border:1px solid var(--border);
     border-radius:9px;
-    font-size:14px;
+    font-size:12px;
 }
 
 .dark-btn{
@@ -136,7 +136,7 @@ header p{
 .card{
     background:var(--card);
     padding:28px;
-    margin-bottom:22px;
+    margin-bottom:14px;
     border-radius:20px;
     box-shadow:0 7px 25px rgba(0,0,0,.08);
 }
@@ -179,7 +179,7 @@ input:focus{
 button{
     width:100%;
     padding:14px;
-    margin-top:20px;
+    margin-top:12px;
     background:var(--primary);
     color:white;
     border:none;
@@ -452,13 +452,13 @@ footer p{
 
 .guide-card{
     width:100%;
-    max-width:520px;
-    max-height:90vh;
+    max-width:410px;
+    max-height:78vh;
     overflow-y:auto;
     background:var(--card);
     color:var(--text);
     border-radius:22px;
-    padding:28px;
+    padding:20px;
     box-shadow:0 20px 60px rgba(0,0,0,.3);
     animation:guideIn .25s ease;
 }
@@ -480,8 +480,8 @@ footer p{
 }
 
 .guide-header .guide-icon{
-    font-size:48px;
-    margin-bottom:8px;
+    font-size:34px;
+    margin-bottom:5px;
 }
 
 .guide-header h2{
@@ -498,7 +498,7 @@ footer p{
     display:flex;
     gap:14px;
     align-items:flex-start;
-    padding:13px 0;
+    padding:8px 0;
     border-bottom:1px solid var(--border);
 }
 
@@ -507,8 +507,8 @@ footer p{
 }
 
 .guide-number{
-    min-width:34px;
-    height:34px;
+    min-width:28px;
+    height:28px;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -519,7 +519,7 @@ footer p{
 }
 
 .guide-step-content{
-    line-height:1.5;
+    line-height:1.35;
 }
 
 .guide-step-content b{
@@ -566,6 +566,16 @@ footer p{
         width:100%;
     }
 }
+
+/* FEEDBACK SYSTEM */
+.feedback-overlay{position:fixed;inset:0;background:rgba(15,23,42,.65);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:20px;z-index:11000}.feedback-overlay.show{display:flex}.feedback-card{width:100%;max-width:500px;background:var(--card);color:var(--text);border-radius:22px;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:guideIn .25s ease}.feedback-header{text-align:center;margin-bottom:20px}.feedback-icon{font-size:45px;margin-bottom:8px}.feedback-header h2{color:var(--primary);margin-bottom:7px}.feedback-header p{color:var(--muted);line-height:1.5}.rating-row{display:flex;justify-content:center;gap:8px;margin:15px 0 20px}.rating-btn{width:52px;height:52px;margin:0;padding:0;border:2px solid var(--border);background:var(--card);color:var(--text);font-size:25px;border-radius:12px}.rating-btn:hover,.rating-btn.active{border-color:#f59e0b;background:rgba(245,158,11,.12)}.feedback-card textarea{width:100%;min-height:120px;margin-top:8px;padding:13px;border:1px solid var(--border);border-radius:11px;background:var(--card);color:var(--text);font-size:15px;resize:vertical;outline:none}.feedback-card textarea:focus{border-color:var(--primary)}.feedback-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.feedback-actions button{margin-top:0}.feedback-close{background:#64748b}.feedback-success{text-align:center;padding:18px 0;line-height:1.7}.feedback-success .success-icon{font-size:48px;margin-bottom:10px}.feedback-btn{width:auto;margin:0;padding:10px 14px;background:#db2777;border-radius:9px}.feedback-note{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.5}@media(max-width:600px){.feedback-card{padding:22px}.feedback-btn{width:100%}.feedback-actions{grid-template-columns:1fr}}
+
+/* COMPACT USER GUIDE + FEEDBACK */
+.guide-card{max-width:410px;max-height:78vh;padding:20px;border-radius:18px}
+.guide-header{margin-bottom:12px}.guide-header .guide-icon{font-size:34px;margin-bottom:4px}.guide-header h2{font-size:19px;margin-bottom:4px}.guide-header p{font-size:12px;line-height:1.35}
+.guide-step{gap:10px;padding:8px 0}.guide-number{min-width:28px;height:28px;font-size:12px}.guide-step-content{line-height:1.3}.guide-step-content b{font-size:13px}.guide-step-content span{font-size:11px}.guide-buttons{margin-top:12px}.guide-buttons button{padding:10px;font-size:13px}
+.feedback-card{max-width:390px;padding:20px;border-radius:18px}.feedback-header{margin-bottom:12px}.feedback-icon{font-size:32px;margin-bottom:4px}.feedback-header h2{font-size:19px;margin-bottom:4px}.feedback-header p{font-size:12px;line-height:1.35}.rating-row{gap:5px;margin:10px 0 13px}.rating-btn{width:42px;height:42px;font-size:20px}.feedback-card label{font-size:13px}.feedback-card textarea{min-height:80px;font-size:13px;padding:10px}.feedback-note{font-size:10px;margin-top:7px}.feedback-actions{margin-top:12px}.feedback-actions button{padding:10px;font-size:13px}.feedback-success{padding:10px 0;font-size:13px}.feedback-success .success-icon{font-size:34px}.feedback-success h2{font-size:19px}
+@media(max-width:600px){.guide-card,.feedback-card{max-width:calc(100vw - 30px);padding:17px}.guide-card{max-height:82vh}.guide-header .guide-icon{font-size:30px}.feedback-card textarea{min-height:75px}}
 </style>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 </head>
@@ -700,6 +710,23 @@ footer p{
     </div>
 
 </div>
+<!-- FEEDBACK POPUP -->
+<div class="feedback-overlay" id="feedbackOverlay">
+<div class="feedback-card">
+<div id="feedbackFormArea">
+<div class="feedback-header"><div class="feedback-icon">💬</div><h2>Help Us Improve</h2><p>How was your experience with Travel Fuel Assistant?</p></div>
+<label>⭐ Your Rating</label>
+<div class="rating-row" id="ratingRow">
+<button type="button" class="rating-btn" data-rating="1" onclick="selectRating(1)">😞</button><button type="button" class="rating-btn" data-rating="2" onclick="selectRating(2)">😕</button><button type="button" class="rating-btn" data-rating="3" onclick="selectRating(3)">😐</button><button type="button" class="rating-btn" data-rating="4" onclick="selectRating(4)">🙂</button><button type="button" class="rating-btn" data-rating="5" onclick="selectRating(5)">😍</button>
+</div>
+<label for="feedbackText">📝 Your Feedback</label>
+<textarea id="feedbackText" maxlength="1000" placeholder="Tell us what you liked, what was difficult, or what we can improve..."></textarea>
+<div class="feedback-note">Your feedback is used to improve the Travel Fuel Assistant experience.</div>
+<div class="feedback-actions"><button type="button" class="feedback-close" onclick="closeFeedback()">Cancel</button><button type="button" onclick="submitFeedback()">🚀 Send Feedback</button></div>
+</div>
+<div id="feedbackSuccessArea" class="feedback-success" style="display:none;"><div class="success-icon">✅</div><h2>Thank You!</h2><p>Your feedback has been saved on this device.</p><p class="feedback-note">For now, the form stores feedback locally because your GitHub Pages website has no backend. We can connect it to Google Forms/Sheets next.</p><button type="button" onclick="closeFeedback()">Done</button></div>
+</div></div>
+
 <header>
     <h1>🚗 <span id="title">Travel Fuel Assistant</span></h1>
     <p id="subtitle">
@@ -720,6 +747,8 @@ footer p{
         ❓ How to Use
 
     </button>
+
+    <button class="feedback-btn" onclick="openFeedback()" id="feedbackButton">💬 Feedback</button>
 </div>
 
     <div class="top-controls">
@@ -2067,6 +2096,15 @@ function setupRouteListeners(){setupLocationAutocomplete("from","fromSuggestions
 const translations={en:{title:"Travel Fuel Assistant",subtitle:"Smart journey planning & fuel cost estimation",vehicleHeading:"🚗 Select Your Vehicle",vehicleLabel:"Vehicle",tripHeading:"📍 Plan Your Trip",fromLabel:"Starting Location",toLabel:"Destination",distanceButton:"📏 Show Distance",routeButton:"🗺️ Show Route & Map",calculatorHeading:"⛽ Fuel Trip Calculator",distanceLabel:"Trip Distance (KM)",priceLabel:"Fuel Price per Litre (₹)",calculateButton:"Calculate My Trip",resetButton:"🔄 Reset",vehicleFeature:"Vehicle",fuelFeature:"Fuel",mapFeature:"Maps",costFeature:"Cost",routeInfoText:"📍 Enter your starting location and destination.<br><br>📏 Click <b>Show Distance</b> for a quick road-distance calculation.<br><br>🗺️ Click <b>Show Route & Map</b> to see the route, distance and estimated travel time here.<br><br>🔄 Select Round Trip if you are returning to the starting location."},te:{title:"ప్రయాణ ఇంధన సహాయకుడు",subtitle:"స్మార్ట్ ప్రయాణ ప్లానింగ్ మరియు ఇంధన ఖర్చు అంచనా",vehicleHeading:"🚗 మీ వాహనాన్ని ఎంచుకోండి",vehicleLabel:"వాహనం",tripHeading:"📍 మీ ప్రయాణాన్ని ప్లాన్ చేయండి",fromLabel:"ప్రారంభ ప్రదేశం",toLabel:"గమ్యస్థానం",distanceButton:"📏 దూరాన్ని చూపించు",routeButton:"🗺️ రూట్ & మ్యాప్ చూపించు",calculatorHeading:"⛽ ప్రయాణ ఇంధన కాలిక్యులేటర్",distanceLabel:"ప్రయాణ దూరం (KM)",priceLabel:"లీటరుకు ఇంధన ధర (₹)",calculateButton:"నా ప్రయాణాన్ని లెక్కించు",resetButton:"🔄 రీసెట్",vehicleFeature:"వాహనం",fuelFeature:"ఇంధనం",mapFeature:"మ్యాప్స్",costFeature:"ఖర్చు",routeInfoText:"📍 ప్రారంభ ప్రదేశం మరియు గమ్యస్థానాన్ని నమోదు చేయండి.<br><br>📏 రోడ్డు దూరం కోసం <b>దూరాన్ని చూపించు</b> నొక్కండి.<br><br>🗺️ ఇక్కడ రూట్, దూరం మరియు ప్రయాణ సమయాన్ని చూడటానికి <b>రూట్ & మ్యాప్ చూపించు</b> నొక్కండి.<br><br>🔄 తిరిగి రావాలంటే Round Trip ఎంచుకోండి."},hi:{title:"यात्रा ईंधन सहायक",subtitle:"स्मार्ट यात्रा योजना और ईंधन लागत अनुमान",vehicleHeading:"🚗 अपना वाहन चुनें",vehicleLabel:"वाहन",tripHeading:"📍 अपनी यात्रा की योजना बनाएं",fromLabel:"शुरुआती स्थान",toLabel:"गंतव्य",distanceButton:"📏 दूरी दिखाएं",routeButton:"🗺️ रूट और मैप दिखाएं",calculatorHeading:"⛽ यात्रा ईंधन कैलकुलेटर",distanceLabel:"यात्रा दूरी (KM)",priceLabel:"प्रति लीटर ईंधन कीमत (₹)",calculateButton:"मेरी यात्रा की गणना करें",resetButton:"🔄 रीसेट",vehicleFeature:"वाहन",fuelFeature:"ईंधन",mapFeature:"मैप",costFeature:"लागत",routeInfoText:"📍 शुरुआती स्थान और गंतव्य दर्ज करें।<br><br>📏 सड़क दूरी के लिए <b>दूरी दिखाएं</b> दबाएं।<br><br>🗺️ यहां रूट, दूरी और यात्रा समय देखने के लिए <b>रूट और मैप दिखाएं</b> दबाएं।<br><br>🔄 वापस लौटने के लिए Round Trip चुनें।"},ta:{title:"பயண எரிபொருள் உதவியாளர்",subtitle:"ஸ்மார்ட் பயண திட்டமிடல் மற்றும் எரிபொருள் செலவு மதிப்பீடு",vehicleHeading:"🚗 உங்கள் வாகனத்தைத் தேர்ந்தெடுக்கவும்",vehicleLabel:"வாகனம்",tripHeading:"📍 உங்கள் பயணத்தை திட்டமிடுங்கள்",fromLabel:"தொடக்க இடம்",toLabel:"இலக்கு",distanceButton:"📏 தூரத்தைக் காட்டு",routeButton:"🗺️ பாதை & வரைபடத்தைக் காட்டு",calculatorHeading:"⛽ பயண எரிபொருள் கணிப்பான்",distanceLabel:"பயண தூரம் (KM)",priceLabel:"லிட்டருக்கு எரிபொருள் விலை (₹)",calculateButton:"என் பயணத்தை கணக்கிடு",resetButton:"🔄 மீட்டமை",vehicleFeature:"வாகனம்",fuelFeature:"எரிபொருள்",mapFeature:"வரைபடம்",costFeature:"செலவு",routeInfoText:"📍 தொடக்க இடம் மற்றும் இலக்கை உள்ளிடவும்.<br><br>📏 சாலை தூரத்திற்கு <b>தூரத்தைக் காட்டு</b> என்பதை அழுத்தவும்.<br><br>🗺️ பாதை, தூரம் மற்றும் பயண நேரத்தை இங்கே காண <b>பாதை & வரைபடத்தைக் காட்டு</b> என்பதை அழுத்தவும்.<br><br>🔄 திரும்பிச் செல்ல Round Trip தேர்ந்தெடுக்கவும்."},kn:{title:"ಪ್ರಯಾಣ ಇಂಧನ ಸಹಾಯಕ",subtitle:"ಸ್ಮಾರ್ಟ್ ಪ್ರಯಾಣ ಯೋಜನೆ ಮತ್ತು ಇಂಧನ ವೆಚ್ಚ ಅಂದಾಜು",vehicleHeading:"🚗 ನಿಮ್ಮ ವಾಹನವನ್ನು ಆಯ್ಕೆಮಾಡಿ",vehicleLabel:"ವಾಹನ",tripHeading:"📍 ನಿಮ್ಮ ಪ್ರಯಾಣವನ್ನು ಯೋಜಿಸಿ",fromLabel:"ಪ್ರಾರಂಭ ಸ್ಥಳ",toLabel:"ಗಮ್ಯಸ್ಥಾನ",distanceButton:"📏 ದೂರ ತೋರಿಸಿ",routeButton:"🗺️ ಮಾರ್ಗ & ನಕ್ಷೆ ತೋರಿಸಿ",calculatorHeading:"⛽ ಪ್ರಯಾಣ ಇಂಧನ ಕ್ಯಾಲ್ಕುಲೇಟರ್",distanceLabel:"ಪ್ರಯಾಣದ ದೂರ (KM)",priceLabel:"ಪ್ರತಿ ಲೀಟರ್ ಇಂಧನ ಬೆಲೆ (₹)",calculateButton:"ನನ್ನ ಪ್ರಯಾಣವನ್ನು ಲೆಕ್ಕಿಸಿ",resetButton:"🔄 ಮರುಹೊಂದಿಸಿ",vehicleFeature:"ವಾಹನ",fuelFeature:"ಇಂಧನ",mapFeature:"ನಕ್ಷೆ",costFeature:"ವೆಚ್ಚ",routeInfoText:"📍 ಪ್ರಾರಂಭ ಸ್ಥಳ ಮತ್ತು ಗಮ್ಯಸ್ಥಾನವನ್ನು ನಮೂದಿಸಿ.<br><br>📏 ರಸ್ತೆ ದೂರಕ್ಕಾಗಿ <b>ದೂರ ತೋರಿಸಿ</b> ಒತ್ತಿರಿ.<br><br>🗺️ ಮಾರ್ಗ, ದೂರ ಮತ್ತು ಪ್ರಯಾಣ ಸಮಯವನ್ನು ಇಲ್ಲಿ ನೋಡಲು <b>ಮಾರ್ಗ & ನಕ್ಷೆ ತೋರಿಸಿ</b> ಒತ್ತಿರಿ.<br><br>🔄 ಹಿಂದಿರುಗಲು Round Trip ಆಯ್ಕೆಮಾಡಿ."},ml:{title:"യാത്ര ഇന്ധന സഹായി",subtitle:"സ്മാർട്ട് യാത്രാ പ്ലാനിംഗും ഇന്ധന ചെലവ് കണക്കാക്കലും",vehicleHeading:"🚗 നിങ്ങളുടെ വാഹനം തിരഞ്ഞെടുക്കുക",vehicleLabel:"വാഹനം",tripHeading:"📍 നിങ്ങളുടെ യാത്ര ആസൂത്രണം ചെയ്യുക",fromLabel:"ആരംഭ സ്ഥലം",toLabel:"ലക്ഷ്യസ്ഥാനം",distanceButton:"📏 ദൂരം കാണിക്കുക",routeButton:"🗺️ റൂട്ടും മാപ്പും കാണിക്കുക",calculatorHeading:"⛽ യാത്ര ഇന്ധന കാൽക്കുലേറ്റർ",distanceLabel:"യാത്രാ ദൂരം (KM)",priceLabel:"ലിറ്ററിന് ഇന്ധന വില (₹)",calculateButton:"എന്റെ യാത്ര കണക്കാക്കുക",resetButton:"🔄 റീസെറ്റ്",vehicleFeature:"വാഹനം",fuelFeature:"ഇന്ധനം",mapFeature:"മാപ്പ്",costFeature:"ചെലവ്",routeInfoText:"📍 ആരംഭ സ്ഥലവും ലക്ഷ്യസ്ഥാനവും നൽകുക.<br><br>📏 റോഡ് ദൂരം കണക്കാക്കാൻ <b>ദൂരം കാണിക്കുക</b> അമർത്തുക.<br><br>🗺️ റൂട്ട്, ദൂരം, യാത്രാ സമയം ഇവിടെ കാണാൻ <b>റൂട്ടും മാപ്പും കാണിക്കുക</b> അമർത്തുക.<br><br>🔄 മടങ്ങാൻ Round Trip തിരഞ്ഞെടുക്കുക."}};
 
 function changeLanguage(){const lang=document.getElementById("language").value,t=translations[lang];if(!t)return;document.documentElement.lang=lang;["title","subtitle","vehicleHeading","vehicleLabel","tripHeading","fromLabel","toLabel","distanceButton","routeButton","calculatorHeading","distanceLabel","priceLabel","calculateButton","resetButton","vehicleFeature","fuelFeature","mapFeature","costFeature"].forEach(id=>{document.getElementById(id).innerText=t[id]});document.getElementById("routeInfoText").innerHTML=t.routeInfoText;}
+
+
+/* FEEDBACK FUNCTIONS */
+let selectedRating=0;
+function openFeedback(){document.getElementById("feedbackOverlay").classList.add("show");document.getElementById("feedbackFormArea").style.display="block";document.getElementById("feedbackSuccessArea").style.display="none";}
+function closeFeedback(){document.getElementById("feedbackOverlay").classList.remove("show");}
+function selectRating(rating){selectedRating=rating;document.querySelectorAll(".rating-btn").forEach(function(btn){btn.classList.toggle("active",Number(btn.dataset.rating)===rating);});}
+function submitFeedback(){const text=document.getElementById("feedbackText").value.trim();if(!selectedRating){showNotification("⭐ Please select a rating.");return;}if(!text){showNotification("📝 Please enter your feedback.");return;}const feedbacks=JSON.parse(localStorage.getItem("travelFuelFeedback")||"[]");feedbacks.unshift({rating:selectedRating,feedback:text,date:new Date().toISOString()});localStorage.setItem("travelFuelFeedback",JSON.stringify(feedbacks.slice(0,20)));document.getElementById("feedbackText").value="";selectedRating=0;document.querySelectorAll(".rating-btn").forEach(function(btn){btn.classList.remove("active")});document.getElementById("feedbackFormArea").style.display="none";document.getElementById("feedbackSuccessArea").style.display="block";}
+document.getElementById("feedbackOverlay").addEventListener("click",function(e){if(e.target===this)closeFeedback();});
 
 /* =====================================================
    ENTER KEY
