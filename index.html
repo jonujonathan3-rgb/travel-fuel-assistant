@@ -2103,7 +2103,81 @@ let selectedRating=0;
 function openFeedback(){document.getElementById("feedbackOverlay").classList.add("show");document.getElementById("feedbackFormArea").style.display="block";document.getElementById("feedbackSuccessArea").style.display="none";}
 function closeFeedback(){document.getElementById("feedbackOverlay").classList.remove("show");}
 function selectRating(rating){selectedRating=rating;document.querySelectorAll(".rating-btn").forEach(function(btn){btn.classList.toggle("active",Number(btn.dataset.rating)===rating);});}
-function submitFeedback(){const text=document.getElementById("feedbackText").value.trim();if(!selectedRating){showNotification("⭐ Please select a rating.");return;}if(!text){showNotification("📝 Please enter your feedback.");return;}const feedbacks=JSON.parse(localStorage.getItem("travelFuelFeedback")||"[]");feedbacks.unshift({rating:selectedRating,feedback:text,date:new Date().toISOString()});localStorage.setItem("travelFuelFeedback",JSON.stringify(feedbacks.slice(0,20)));document.getElementById("feedbackText").value="";selectedRating=0;document.querySelectorAll(".rating-btn").forEach(function(btn){btn.classList.remove("active")});document.getElementById("feedbackFormArea").style.display="none";document.getElementById("feedbackSuccessArea").style.display="block";}
+async function submitFeedback(){
+    const text=document.getElementById("feedbackText").value.trim();
+
+    if(!selectedRating){
+        showNotification("⭐ Please select a rating.");
+        return;
+    }
+
+    if(!text){
+        showNotification("📝 Please enter your feedback.");
+        return;
+    }
+
+    const feedbackData={
+        rating:selectedRating,
+        feedback:text,
+        date:new Date().toISOString(),
+        page:window.location.href
+    };
+
+    /* Keep the existing local backup */
+    const feedbacks=JSON.parse(
+        localStorage.getItem("travelFuelFeedback")||"[]"
+    );
+
+    feedbacks.unshift(feedbackData);
+
+    localStorage.setItem(
+        "travelFuelFeedback",
+        JSON.stringify(feedbacks.slice(0,20))
+    );
+
+    /* Send feedback to Google Sheets through Google Apps Script */
+    const GOOGLE_SCRIPT_URL="https://script.google.com/macros/s/AKfycbyY_YGNHo5MJnPpjGos5UU7FFkHndwGcrkBoMDaJ8bb6gKh13PODJc_mzmts5pr907k/exec";
+
+    try{
+        const response=await fetch(
+            GOOGLE_SCRIPT_URL,
+            {
+                method:"POST",
+                headers:{
+                    "Content-Type":"text/plain;charset=utf-8"
+                },
+                body:JSON.stringify(feedbackData)
+            }
+        );
+
+        if(!response.ok){
+            throw new Error("Google Apps Script request failed");
+        }
+
+        console.log("Feedback sent successfully to Google Sheets.");
+    }catch(error){
+        console.error("Feedback could not be sent to Google Sheets:",error);
+        /* Local backup is already saved, so the user's feedback is not lost. */
+    }
+
+    document.getElementById("feedbackText").value="";
+    selectedRating=0;
+
+    document.querySelectorAll(".rating-btn").forEach(function(btn){
+        btn.classList.remove("active");
+    });
+
+    document.getElementById("feedbackFormArea").style.display="none";
+    document.getElementById("feedbackSuccessArea").style.display="block";
+
+    /* Update the existing success message */
+    const successArea=document.getElementById("feedbackSuccessArea");
+    const note=successArea.querySelector(".feedback-note");
+
+    if(note){
+        note.innerText="Thank you! Your feedback has been submitted successfully.";
+    }
+}
 document.getElementById("feedbackOverlay").addEventListener("click",function(e){if(e.target===this)closeFeedback();});
 
 /* =====================================================
