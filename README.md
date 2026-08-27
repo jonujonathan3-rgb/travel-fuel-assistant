@@ -8,7 +8,9 @@ A simple and efficient application designed to help users estimate fuel usage, c
 
 ## 📸 Preview
 
-![Travel Fuel Assistant](./travel-fuel-assistant.png)
+<p align="center">
+  <img src="img.png" width="700">
+</p>
 
 ---
 
@@ -44,7 +46,7 @@ cd travel-fuel-assistant
 ```
 travel-fuel-assistant/
 │── README.md
-│── travel-fuel-assistant.png
+│── img.png
 │── src/
 │── assets/
 ```
