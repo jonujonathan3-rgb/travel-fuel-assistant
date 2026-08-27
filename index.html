@@ -21,7 +21,6 @@
 
 
 <title>Travel Fuel Assistant V2</title>
-
 <style>
 *{
     box-sizing:border-box;
@@ -2405,7 +2404,7 @@ window.addEventListener("appinstalled", function(){
 /* Register the service worker */
 if("serviceWorker" in navigator){
     window.addEventListener("load", function(){
-        navigator.serviceWorker.register("./sw.js")
+        navigator.serviceWorker.register("./service-worker.js")
         .then(function(){
             console.log("Travel Fuel Assistant PWA service worker registered.");
         })
@@ -2415,6 +2414,5 @@ if("serviceWorker" in navigator){
     });
 }
 </script>
-
 </body>
 </html>
