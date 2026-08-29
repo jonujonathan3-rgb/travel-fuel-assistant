@@ -590,7 +590,6 @@ footer p{
     #installButton{padding:10px 12px;font-size:12px}
 }
 </style>
-</style>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 </head>
 
@@ -730,20 +729,96 @@ footer p{
 </div>
 <!-- FEEDBACK POPUP -->
 <div class="feedback-overlay" id="feedbackOverlay">
-<div class="feedback-card">
-<div id="feedbackFormArea">
-<div class="feedback-header"><div class="feedback-icon">💬</div><h2>Help Us Improve</h2><p>How was your experience with Travel Fuel Assistant?</p></div>
-<label>⭐ Your Rating</label>
-<div class="rating-row" id="ratingRow">
-<button type="button" class="rating-btn" data-rating="1" onclick="selectRating(1)">😞</button><button type="button" class="rating-btn" data-rating="2" onclick="selectRating(2)">😕</button><button type="button" class="rating-btn" data-rating="3" onclick="selectRating(3)">😐</button><button type="button" class="rating-btn" data-rating="4" onclick="selectRating(4)">🙂</button><button type="button" class="rating-btn" data-rating="5" onclick="selectRating(5)">😍</button>
+    <div class="feedback-card">
+
+        <!-- FEEDBACK FORM -->
+        <div id="feedbackFormArea">
+
+            <div class="feedback-header">
+                <div class="feedback-icon">💬</div>
+                <h2>Help Us Improve</h2>
+                <p>How was your experience with Travel Fuel Assistant?</p>
+            </div>
+
+            <label>⭐ Your Rating</label>
+
+            <div class="rating-row" id="ratingRow">
+                <button type="button"
+                        class="rating-btn"
+                        data-rating="1"
+                        onclick="selectRating(1)">😞</button>
+
+                <button type="button"
+                        class="rating-btn"
+                        data-rating="2"
+                        onclick="selectRating(2)">😕</button>
+
+                <button type="button"
+                        class="rating-btn"
+                        data-rating="3"
+                        onclick="selectRating(3)">😐</button>
+
+                <button type="button"
+                        class="rating-btn"
+                        data-rating="4"
+                        onclick="selectRating(4)">🙂</button>
+
+                <button type="button"
+                        class="rating-btn"
+                        data-rating="5"
+                        onclick="selectRating(5)">😍</button>
+            </div>
+
+            <label for="feedbackText">📝 Your Feedback</label>
+
+            <textarea
+                id="feedbackText"
+                maxlength="1000"
+                placeholder="Tell us what you liked, what was difficult, or what we can improve...">
+            </textarea>
+
+            <div class="feedback-note">
+                Your feedback helps us improve the Travel Fuel Assistant experience.
+            </div>
+
+            <div class="feedback-actions">
+                <button type="button"
+                        class="feedback-close"
+                        onclick="closeFeedback()">
+                    Cancel
+                </button>
+
+                <button type="button"
+                        onclick="submitFeedback()">
+                    🚀 Send Feedback
+                </button>
+            </div>
+
+        </div>
+
+        <!-- SUCCESS MESSAGE -->
+        <div id="feedbackSuccessArea"
+             class="feedback-success"
+             style="display:none;">
+
+            <div class="success-icon">✅</div>
+
+            <h2>Thank You!</h2>
+
+            <p>Your feedback has been submitted successfully.</p>
+
+            <p class="feedback-note">
+                Your feedback helps us make Travel Fuel Assistant better.
+            </p>
+
+            <button type="button" onclick="closeFeedback()">
+                Done
+            </button>
+
+        </div>
+
+    </div>
 </div>
-<label for="feedbackText">📝 Your Feedback</label>
-<textarea id="feedbackText" maxlength="1000" placeholder="Tell us what you liked, what was difficult, or what we can improve..."></textarea>
-<div class="feedback-note">Your feedback is used to improve the Travel Fuel Assistant experience.</div>
-<div class="feedback-actions"><button type="button" class="feedback-close" onclick="closeFeedback()">Cancel</button><button type="button" onclick="submitFeedback()">🚀 Send Feedback</button></div>
-</div>
-<div id="feedbackSuccessArea" class="feedback-success" style="display:none;"><div class="success-icon">✅</div><h2>Thank You!</h2><p>Your feedback has been saved on this device.</p><p class="feedback-note">For now, the form stores feedback locally because your GitHub Pages website has no backend. We can connect it to Google Forms/Sheets next.</p><button type="button" onclick="closeFeedback()">Done</button></div>
-</div></div>
 
 <header>
     <h1>🚗 <span id="title">Travel Fuel Assistant</span></h1>
