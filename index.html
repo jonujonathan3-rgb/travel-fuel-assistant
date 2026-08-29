@@ -922,15 +922,23 @@ footer p{
 
     <div class="grid">
 
-        <div>
+        <label id="fromLabel">
+    Starting Location
+</label>
 
-            <label id="fromLabel">
-                Starting Location
-            </label>
+<div class="location-wrap">
+    <input id="from" type="text" autocomplete="off" placeholder="Example: Hyderabad">
 
-            <div class="location-wrap"><input id="from" type="text" autocomplete="off" placeholder="Example: Hyderabad"><div id="fromSuggestions" class="location-suggestions"></div></div>
+    <button
+        type="button"
+        id="useLocationButton"
+        class="use-location-btn"
+        onclick="useMyLocation()">
+        📍 Use My Location
+    </button>
 
-        </div>
+    <div id="fromSuggestions" class="location-suggestions"></div>
+</div>
 
         <div>
 
