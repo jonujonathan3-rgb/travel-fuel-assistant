@@ -437,6 +437,31 @@ footer p{
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
 <style>
 .location-wrap{position:relative}.location-suggestions{position:absolute;left:0;right:0;top:100%;margin-top:5px;background:var(--card);border:1px solid var(--border);border-radius:10px;box-shadow:0 8px 22px rgba(0,0,0,.12);z-index:5000;overflow:hidden;display:none}.location-suggestion{padding:12px 14px;cursor:pointer;border-bottom:1px solid var(--border);line-height:1.4}.location-suggestion:last-child{border-bottom:none}.location-suggestion:hover{background:rgba(37,99,235,.08)}.location-suggestion small{display:block;color:var(--muted);font-size:12px;margin-top:3px}.route-panel{display:none;margin-top:20px}.route-panel.show{display:block}.route-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:15px}.route-stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center}.route-stat .route-icon{font-size:22px;margin-bottom:5px}.route-stat b{font-size:17px}#routeMap{height:390px;border-radius:15px;border:1px solid var(--border);overflow:hidden;z-index:1}.route-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px}.route-actions button{margin-top:0}.maps-btn{background:#16a34a}.route-note{margin-top:12px;padding:12px 14px;border-radius:10px;background:rgba(37,99,235,.07);color:var(--muted);font-size:13px;line-height:1.6}.route-error{color:var(--danger);font-weight:bold;padding:12px 0}@media(max-width:800px){.route-summary{grid-template-columns:1fr 1fr}}@media(max-width:500px){.route-actions{grid-template-columns:1fr}#routeMap{height:300px}}
+
+/* USE MY LOCATION BUTTON */
+.use-location-btn{
+    width:100%;
+    margin-top:8px;
+    padding:9px 12px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:var(--card);
+    color:var(--text);
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.use-location-btn:hover{
+    transform:translateY(-1px);
+}
+
+.use-location-btn:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+</style>
 /* =====================================================
    FIRST-TIME USER GUIDE
 ===================================================== */
@@ -1519,6 +1544,124 @@ let routeSearchTimers={};
 function formatDuration(seconds){const mins=Math.round(seconds/60);if(mins<60)return mins+" min";const h=Math.floor(mins/60),m=mins%60;return h+" hr "+(m?m+" min":"");}
 function getSelectedVehicleData(){const n=document.getElementById("vehicle").value;return n&&vehicles[n]?vehicles[n]:null;}
 function updateRouteFuel(distanceKm){const f=document.getElementById("routeFuel"),c=document.getElementById("routeCost"),d=getSelectedVehicleData(),p=parseFloat(document.getElementById("price").value);if(!d){f.innerText="Select vehicle";c.innerText="—";return}if(d.electric){f.innerText="EV";c.innerText="Charging needed";return}const fuel=distanceKm/d.mileage;f.innerText=fuel.toFixed(2)+" L";c.innerText=p>0?"₹"+(fuel*p).toFixed(2):"Enter fuel price";}
+/* =====================================================
+   USE MY LOCATION
+===================================================== */
+
+function useMyLocation(){
+
+    const input = document.getElementById("from");
+    const button = document.getElementById("useLocationButton");
+
+    if(!navigator.geolocation){
+        showNotification(
+            "❌ Location services are not supported by this browser."
+        );
+        return;
+    }
+
+    button.disabled = true;
+    button.innerText = "📍 Getting location...";
+
+    navigator.geolocation.getCurrentPosition(
+
+        async function(position){
+
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            try{
+
+                const response = await fetch(
+                    "https://nominatim.openstreetmap.org/reverse?format=json&lat="
+                    + lat
+                    + "&lon="
+                    + lon
+                    + "&zoom=18&addressdetails=1"
+                );
+
+                if(!response.ok){
+                    throw new Error("Reverse geocoding failed");
+                }
+
+                const data = await response.json();
+
+                if(!data.display_name){
+                    throw new Error("Location not found");
+                }
+
+                input.value = data.display_name;
+
+                const suggestions =
+                    document.getElementById("fromSuggestions");
+
+                if(suggestions){
+                    suggestions.style.display = "none";
+                }
+
+                showNotification(
+                    "📍 Starting location updated!"
+                );
+
+            }catch(error){
+
+                console.error(error);
+
+                showNotification(
+                    "❌ Unable to find your current location."
+                );
+
+            }finally{
+
+                button.disabled = false;
+                button.innerText = "📍 Use My Location";
+
+            }
+
+        },
+
+        function(error){
+
+            console.error(error);
+
+            button.disabled = false;
+            button.innerText = "📍 Use My Location";
+
+            if(error.code === 1){
+
+                showNotification(
+                    "⚠️ Location permission was denied."
+                );
+
+            }else if(error.code === 2){
+
+                showNotification(
+                    "⚠️ Your location could not be determined."
+                );
+
+            }else if(error.code === 3){
+
+                showNotification(
+                    "⚠️ Location request timed out."
+                );
+
+            }else{
+
+                showNotification(
+                    "❌ Unable to get your location."
+                );
+
+            }
+
+        },
+
+        {
+            enableHighAccuracy:true,
+            timeout:10000,
+            maximumAge:60000
+        }
+    );
+}
 async function geocodeLocation(q){const r=await fetch("https://nominatim.openstreetmap.org/search?format=json&limit=1&addressdetails=1&q="+encodeURIComponent(q),{headers:{"Accept-Language":document.documentElement.lang||"en"}});if(!r.ok)throw Error();const d=await r.json();if(!d.length)throw Error();return{lat:+d[0].lat,lon:+d[0].lon,display:d[0].display_name};}
 async function fetchRoute(a,b){const u="https://router.project-osrm.org/route/v1/driving/"+a.lon+","+a.lat+";"+b.lon+","+b.lat+"?overview=full&geometries=geojson&steps=false";const r=await fetch(u);if(!r.ok)throw Error();const d=await r.json();if(!d.routes||!d.routes.length)throw Error();return d.routes[0];}
 function ensureRouteMap(){if(routeMap)return;routeMap=L.map("routeMap");L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'}).addTo(routeMap);}
