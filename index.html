@@ -949,30 +949,34 @@ footer p{
 
     <div class="grid">
 
-        <label id="fromLabel">
-    Starting Location
-</label>
+ <div>
+    <label id="fromLabel">
+        Starting Location
+    </label>
 
-<div class="location-wrap">
-    <input id="from" type="text" autocomplete="off" placeholder="Example: Hyderabad">
+    <div class="location-wrap">
+        <input id="from"
+               type="text"
+               autocomplete="off"
+               placeholder="Example: Hyderabad">
 
-    <button
-        type="button"
-        id="useLocationButton"
-        class="use-location-btn"
-        onclick="useMyLocation()">
-        📍 Use My Location
-    </button>
+        <button
+            type="button"
+            id="useLocationButton"
+            class="use-location-btn"
+            onclick="useMyLocation()">
+            📍 Use My Location
+        </button>
 
-    <div id="fromSuggestions" class="location-suggestions"></div>
+        <div id="fromSuggestions"
+             class="location-suggestions"></div>
+    </div>
 </div>
 
-        <div>
-
-            <label id="toLabel">
-                Destination
-            </label>
-
+<div>
+    <label id="toLabel">
+        Destination
+    </label>
             <div class="location-wrap"><input id="to" type="text" autocomplete="off" placeholder="Example: Vijayawada"><div id="toSuggestions" class="location-suggestions"></div></div>
 
         </div>
