@@ -1528,15 +1528,17 @@ function showVehicleMileage(){
     }
     else{
 
-        info.innerHTML=`
-            🚗 <b>${escapeHTML(name)}</b><br>
-            🏷️ Brand: <b>${escapeHTML(data.brand)}</b><br>
-            🚘 Type: <b>${escapeHTML(data.type)}</b><br>
-            📊 Estimated Mileage:
-            <b>${data.mileage} KM/Litre</b>
-        `;
+    info.innerHTML=`
+        🚗 <b>${escapeHTML(name)}</b><br>
+        🏷️ Brand: <b>${escapeHTML(data.brand)}</b><br>
+        🚘 Type: <b>${escapeHTML(data.type)}</b><br>
+        📊 Estimated Mileage:
+        <b>${data.mileage} KM/Litre</b><br>
+        📈 Real-world Range:
+        <b>${data.mileageRange ? data.mileageRange[0] + "–" + data.mileageRange[1] + " KM/Litre" : "Not available"}</b>
+    `;
 
-    }
+}
 
 }
 
