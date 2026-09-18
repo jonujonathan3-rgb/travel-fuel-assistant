@@ -612,6 +612,30 @@ footer p{
     }
 
 }
+
+/* =====================================================
+   BOTH LOCATIONS MARKERS
+===================================================== */
+
+.both-start-marker{
+    background:#16a34a;
+    border:3px solid white;
+    border-radius:50% 50% 50% 0;
+    width:24px;
+    height:24px;
+    transform:rotate(-45deg);
+    box-shadow:0 2px 8px rgba(0,0,0,.35);
+}
+
+.both-destination-marker{
+    background:#dc2626;
+    border:3px solid white;
+    border-radius:50% 50% 50% 0;
+    width:24px;
+    height:24px;
+    transform:rotate(-45deg);
+    box-shadow:0 2px 8px rgba(0,0,0,.35);
+}
 </style>
 <style>
 /* =====================================================
@@ -2295,7 +2319,15 @@ async function selectBothStartingPoint(lat,lon){
             L.marker(
                 [lat,lon],
                 {
-                    draggable:true
+                    draggable:true,
+
+                    icon:L.divIcon({
+                        className:"",
+                        html:
+                            '<div class="both-start-marker"></div>',
+                        iconSize:[24,24],
+                        iconAnchor:[12,24]
+                    })
                 }
             )
             .addTo(
@@ -2405,8 +2437,6 @@ async function selectBothStartingPoint(lat,lon){
     updateBothLocationsStatus();
 
 }
-
-
 /* =====================================================
    DESTINATION
 ===================================================== */
