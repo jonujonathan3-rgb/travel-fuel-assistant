@@ -1037,13 +1037,77 @@ footer p{
 
 </div>
 
+<!-- =====================================================
+     BOTH LOCATIONS MAP PICKER
+===================================================== -->
+
+<div
+    id="bothLocationsPickerOverlay"
+    class="destination-picker-overlay"
+>
+
+    <div class="destination-picker-card">
+
+        <div class="destination-picker-header">
+
+            <h3>🗺️ Select Both Locations</h3>
+
+            <button
+                type="button"
+                class="destination-picker-close"
+                onclick="closeBothLocationsPicker()"
+                aria-label="Close"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <p
+            id="bothLocationsPickerHelp"
+            class="destination-picker-help"
+        >
+            📍 Tap the map to select your Starting Location.
+        </p>
+
+        <div id="bothLocationsPickerMap"></div>
+
+        <div id="bothLocationsPickerStatus">
+            📍 Starting Location not selected
+            <br><br>
+            🎯 Destination not selected
+        </div>
+
+        <div class="destination-picker-actions">
+
+            <button
+                type="button"
+                class="destination-picker-cancel"
+                onclick="closeBothLocationsPicker()"
+            >
+                Cancel
+            </button>
+
+            <button
+                type="button"
+                class="destination-picker-confirm"
+                onclick="confirmBothLocationsFromMap()"
+            >
+                ✅ Use These Locations
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
 <header>
     <h1>🚗 <span id="title">Travel Fuel Assistant</span></h1>
     <p id="subtitle">
         Smart journey planning & fuel cost estimation
     </p>
 </header>
-
 <div class="top-bar">
 
     <div style="display:flex;align-items:center;gap:10px;">
@@ -1194,6 +1258,15 @@ footer p{
     >
         📍 Select Destination on Map
     </button>
+
+<button
+    type="button"
+    id="selectBothLocationsButton"
+    class="select-destination-btn"
+    onclick="openBothLocationsPicker()"
+>
+    🗺️ Select Both Locations on Map
+</button>
 </div>
 
     <label>Trip Type</label>
@@ -2043,6 +2116,613 @@ function closeDestinationPicker(){
     }
 
 }
+
+/* =====================================================
+   BOTH LOCATIONS MAP PICKER
+===================================================== */
+
+let bothLocationsPickerMap = null;
+
+let bothStartingMarker = null;
+let bothDestinationMarker = null;
+
+let bothStartingLocation = null;
+let bothDestinationLocation = null;
+
+let bothLocationStep = "starting";
+
+
+function openBothLocationsPicker(){
+
+    const overlay =
+        document.getElementById(
+            "bothLocationsPickerOverlay"
+        );
+
+    if(!overlay) return;
+
+    overlay.classList.add("show");
+
+    bothLocationStep = "starting";
+
+    bothStartingLocation = null;
+    bothDestinationLocation = null;
+
+
+    if(bothLocationsPickerMap){
+
+        if(bothStartingMarker){
+            bothLocationsPickerMap.removeLayer(
+                bothStartingMarker
+            );
+            bothStartingMarker = null;
+        }
+
+        if(bothDestinationMarker){
+            bothLocationsPickerMap.removeLayer(
+                bothDestinationMarker
+            );
+            bothDestinationMarker = null;
+        }
+
+    }
+
+
+    updateBothLocationsStatus();
+
+
+    if(!bothLocationsPickerMap){
+
+        bothLocationsPickerMap =
+            L.map("bothLocationsPickerMap")
+            .setView(
+                [20.5937,78.9629],
+                5
+            );
+
+
+        L.tileLayer(
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            {
+                maxZoom:19,
+                attribution:
+                    '&copy; OpenStreetMap contributors'
+            }
+        ).addTo(
+            bothLocationsPickerMap
+        );
+
+
+        bothLocationsPickerMap.on(
+            "click",
+            function(event){
+
+                selectBothLocationPoint(
+                    event.latlng.lat,
+                    event.latlng.lng
+                );
+
+            }
+        );
+
+    }
+
+
+    setTimeout(function(){
+
+        bothLocationsPickerMap.invalidateSize();
+
+    },150);
+
+}
+
+
+/* =====================================================
+   MAP CLICK
+===================================================== */
+
+async function selectBothLocationPoint(lat,lon){
+
+    if(bothLocationStep === "starting"){
+
+        await selectBothStartingPoint(
+            lat,
+            lon
+        );
+
+    }
+    else if(bothLocationStep === "destination"){
+
+        await selectBothDestinationPoint(
+            lat,
+            lon
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   STARTING LOCATION
+===================================================== */
+
+async function selectBothStartingPoint(lat,lon){
+
+    const status =
+        document.getElementById(
+            "bothLocationsPickerStatus"
+        );
+
+    bothStartingLocation = {
+        lat:lat,
+        lon:lon,
+        display:""
+    };
+
+
+    if(!bothStartingMarker){
+
+        bothStartingMarker =
+            L.marker(
+                [lat,lon],
+                {
+                    draggable:true
+                }
+            )
+            .addTo(
+                bothLocationsPickerMap
+            );
+
+
+        bothStartingMarker.on(
+            "dragend",
+            function(){
+
+                const position =
+                    bothStartingMarker.getLatLng();
+
+                selectBothStartingPoint(
+                    position.lat,
+                    position.lng
+                );
+
+            }
+        );
+
+    }
+    else{
+
+        bothStartingMarker.setLatLng([
+            lat,
+            lon
+        ]);
+
+    }
+
+
+    bothLocationsPickerMap.setView(
+        [lat,lon],
+        16
+    );
+
+
+    status.innerText =
+        "🔄 Finding Starting Location...";
+
+
+    try{
+
+        const response =
+            await fetch(
+                "https://nominatim.openstreetmap.org/reverse" +
+                "?format=json" +
+                "&lat=" + lat +
+                "&lon=" + lon +
+                "&zoom=18" +
+                "&addressdetails=1",
+                {
+                    headers:{
+                        "Accept-Language":
+                            document.documentElement.lang ||
+                            "en"
+                    }
+                }
+            );
+
+
+        if(!response.ok){
+
+            throw new Error(
+                "Reverse geocoding failed"
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if(!data.display_name){
+
+            throw new Error(
+                "Location not found"
+            );
+
+        }
+
+
+        bothStartingLocation.display =
+            data.display_name;
+
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        bothStartingLocation.display =
+            lat.toFixed(6) +
+            ", " +
+            lon.toFixed(6);
+
+    }
+
+
+    bothLocationStep =
+        "destination";
+
+
+    updateBothLocationsStatus();
+
+}
+
+
+/* =====================================================
+   DESTINATION
+===================================================== */
+
+async function selectBothDestinationPoint(lat,lon){
+
+    const status =
+        document.getElementById(
+            "bothLocationsPickerStatus"
+        );
+
+    bothDestinationLocation = {
+        lat:lat,
+        lon:lon,
+        display:""
+    };
+
+
+    if(!bothDestinationMarker){
+
+        bothDestinationMarker =
+            L.marker(
+                [lat,lon],
+                {
+                    draggable:true
+                }
+            )
+            .addTo(
+                bothLocationsPickerMap
+            );
+
+
+        bothDestinationMarker.on(
+            "dragend",
+            function(){
+
+                const position =
+                    bothDestinationMarker.getLatLng();
+
+                selectBothDestinationPoint(
+                    position.lat,
+                    position.lng
+                );
+
+            }
+        );
+
+    }
+    else{
+
+        bothDestinationMarker.setLatLng([
+            lat,
+            lon
+        ]);
+
+    }
+
+
+    bothLocationsPickerMap.setView(
+        [lat,lon],
+        16
+    );
+
+
+    status.innerText =
+        "🔄 Finding Destination...";
+
+
+    try{
+
+        const response =
+            await fetch(
+                "https://nominatim.openstreetmap.org/reverse" +
+                "?format=json" +
+                "&lat=" + lat +
+                "&lon=" + lon +
+                "&zoom=18" +
+                "&addressdetails=1",
+                {
+                    headers:{
+                        "Accept-Language":
+                            document.documentElement.lang ||
+                            "en"
+                    }
+                }
+            );
+
+
+        if(!response.ok){
+
+            throw new Error(
+                "Reverse geocoding failed"
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if(!data.display_name){
+
+            throw new Error(
+                "Location not found"
+            );
+
+        }
+
+
+        bothDestinationLocation.display =
+            data.display_name;
+
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        bothDestinationLocation.display =
+            lat.toFixed(6) +
+            ", " +
+            lon.toFixed(6);
+
+    }
+
+
+    bothLocationStep =
+        "complete";
+
+
+    updateBothLocationsStatus();
+
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+function updateBothLocationsStatus(){
+
+    const help =
+        document.getElementById(
+            "bothLocationsPickerHelp"
+        );
+
+    const status =
+        document.getElementById(
+            "bothLocationsPickerStatus"
+        );
+
+
+    const startingText =
+        bothStartingLocation
+        ? "📍 <b>Starting Location:</b><br>" +
+          escapeHTML(
+              bothStartingLocation.display
+          )
+        : "📍 Starting Location not selected";
+
+
+    const destinationText =
+        bothDestinationLocation
+        ? "🎯 <b>Destination:</b><br>" +
+          escapeHTML(
+              bothDestinationLocation.display
+          )
+        : "🎯 Destination not selected";
+
+
+    status.innerHTML =
+        startingText +
+        "<br><br>" +
+        destinationText;
+
+
+    if(bothLocationStep === "starting"){
+
+        help.innerText =
+            "📍 Tap the map to select your Starting Location.";
+
+    }
+    else if(bothLocationStep === "destination"){
+
+        help.innerText =
+            "🎯 Now tap the map to select your Destination.";
+
+    }
+    else{
+
+        help.innerText =
+            "✅ Both locations selected.";
+
+    }
+
+}
+
+
+/* =====================================================
+   CONFIRM
+===================================================== */
+
+function confirmBothLocationsFromMap(){
+
+    if(!bothStartingLocation){
+
+        showNotification(
+            "⚠️ Please select your Starting Location first."
+        );
+
+        return;
+
+    }
+
+
+    if(!bothDestinationLocation){
+
+        showNotification(
+            "⚠️ Please select your Destination."
+        );
+
+        return;
+
+    }
+
+
+    const startingInput =
+        document.getElementById("from");
+
+    const destinationInput =
+        document.getElementById("to");
+
+
+    if(!startingInput || !destinationInput){
+
+        console.error(
+            "Starting or Destination input not found."
+        );
+
+        return;
+
+    }
+
+
+    startingInput.value =
+        bothStartingLocation.display;
+
+    destinationInput.value =
+        bothDestinationLocation.display;
+
+
+    const fromSuggestions =
+        document.getElementById(
+            "fromSuggestions"
+        );
+
+    if(fromSuggestions){
+
+        fromSuggestions.style.display =
+            "none";
+
+    }
+
+
+    const toSuggestions =
+        document.getElementById(
+            "toSuggestions"
+        );
+
+    if(toSuggestions){
+
+        toSuggestions.style.display =
+            "none";
+
+    }
+
+
+    /* Clear old route */
+
+    lastRoute = null;
+
+
+    const distanceResult =
+        document.getElementById(
+            "distanceResult"
+        );
+
+    if(distanceResult){
+
+        distanceResult.style.display =
+            "none";
+
+    }
+
+
+    const routePanel =
+        document.getElementById(
+            "routePanel"
+        );
+
+    if(routePanel){
+
+        routePanel.classList.remove(
+            "show"
+        );
+
+    }
+
+
+    clearRouteMap();
+
+
+    closeBothLocationsPicker();
+
+
+    showNotification(
+        "🗺️ Starting location and destination selected!"
+    );
+
+}
+
+
+/* =====================================================
+   CLOSE
+===================================================== */
+
+function closeBothLocationsPicker(){
+
+    const overlay =
+        document.getElementById(
+            "bothLocationsPickerOverlay"
+        );
+
+    if(overlay){
+
+        overlay.classList.remove(
+            "show"
+        );
+
+    }
+
+}
+
 /* =====================================================
    USE MY LOCATION
 ===================================================== */
