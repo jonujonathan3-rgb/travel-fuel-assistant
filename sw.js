@@ -1,4 +1,4 @@
-const CACHE_NAME = "travel-fuel-assistant-v2";
+const CACHE_NAME = "travel-fuel-assistant-v3";
 
 const APP_SHELL = [
     "./",
@@ -8,31 +8,52 @@ const APP_SHELL = [
     "./icons/icon-512.png"
 ];
 
-/* Install: cache the main app files */
+/* =====================================================
+   INSTALL
+===================================================== */
+
 self.addEventListener("install", event => {
+
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => cache.addAll(APP_SHELL))
             .then(() => self.skipWaiting())
     );
+
 });
 
-/* Activate: remove old Travel Fuel Assistant caches */
+
+/* =====================================================
+   ACTIVATE
+===================================================== */
+
 self.addEventListener("activate", event => {
+
     event.waitUntil(
+
         caches.keys()
             .then(cacheNames => {
+
                 return Promise.all(
+
                     cacheNames
                         .filter(cacheName => cacheName !== CACHE_NAME)
                         .map(cacheName => caches.delete(cacheName))
+
                 );
+
             })
             .then(() => self.clients.claim())
+
     );
+
 });
 
-/* Fetch: cache only your own app files */
+
+/* =====================================================
+   FETCH
+===================================================== */
+
 self.addEventListener("fetch", event => {
 
     if (event.request.method !== "GET") {
@@ -41,53 +62,123 @@ self.addEventListener("fetch", event => {
 
     const requestURL = new URL(event.request.url);
 
-    /*
-     * Only handle requests belonging to the same origin
-     * as the Travel Fuel Assistant.
-     */
+    /* Only handle your own website */
     if (requestURL.origin !== self.location.origin) {
         return;
     }
 
+
+    /*
+     * HTML pages:
+     * NETWORK FIRST
+     *
+     * This ensures website updates appear immediately.
+     */
+
+    if (
+        event.request.destination === "document" ||
+        requestURL.pathname.endsWith(".html") ||
+        requestURL.pathname === "/" ||
+        requestURL.pathname.endsWith("/")
+    ) {
+
+        event.respondWith(
+
+            fetch(event.request)
+
+                .then(networkResponse => {
+
+                    if (
+                        networkResponse &&
+                        networkResponse.status === 200
+                    ) {
+
+                        const responseClone =
+                            networkResponse.clone();
+
+                        caches.open(CACHE_NAME)
+                            .then(cache => {
+
+                                cache.put(
+                                    event.request,
+                                    responseClone
+                                );
+
+                            });
+
+                    }
+
+                    return networkResponse;
+
+                })
+
+                .catch(() => {
+
+                    return caches.match(event.request)
+                        .then(cachedResponse => {
+
+                            return cachedResponse ||
+                                   caches.match("./index.html");
+
+                        });
+
+                })
+
+        );
+
+        return;
+    }
+
+
+    /*
+     * Other files:
+     * CACHE FIRST
+     *
+     * Good for icons and static resources.
+     */
+
     event.respondWith(
+
         caches.match(event.request)
+
             .then(cachedResponse => {
 
-                /* Use cached version when available */
                 if (cachedResponse) {
                     return cachedResponse;
                 }
 
-                /* Otherwise get it from the network */
+
                 return fetch(event.request)
+
                     .then(networkResponse => {
 
-                        /*
-                         * Only cache successful responses.
-                         */
                         if (
                             networkResponse &&
                             networkResponse.status === 200 &&
                             networkResponse.type === "basic"
                         ) {
-                            const responseClone = networkResponse.clone();
+
+                            const responseClone =
+                                networkResponse.clone();
 
                             caches.open(CACHE_NAME)
                                 .then(cache => {
-                                    cache.put(event.request, responseClone);
+
+                                    cache.put(
+                                        event.request,
+                                        responseClone
+                                    );
+
                                 });
+
                         }
 
                         return networkResponse;
-                    })
-                    .catch(() => {
 
-                        /*
-                         * If the network is unavailable,
-                         * return the main app page.
-                         */
-                        return caches.match("./index.html");
                     });
+
             })
+
     );
+
 });
