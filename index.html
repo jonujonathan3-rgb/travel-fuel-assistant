@@ -2458,15 +2458,23 @@ async function selectBothDestinationPoint(lat,lon){
     if(!bothDestinationMarker){
 
         bothDestinationMarker =
-            L.marker(
-                [lat,lon],
-                {
-                    draggable:true
-                }
-            )
-            .addTo(
-                bothLocationsPickerMap
-            );
+    L.marker(
+        [lat,lon],
+        {
+            draggable:true,
+
+            icon:L.divIcon({
+                className:"",
+                html:
+                    '<div class="both-destination-marker"></div>',
+                iconSize:[24,24],
+                iconAnchor:[12,24]
+            })
+        }
+    )
+    .addTo(
+        bothLocationsPickerMap
+    );
 
 
         bothDestinationMarker.on(
