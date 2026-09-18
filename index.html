@@ -2149,19 +2149,25 @@ function openBothLocationsPicker(){
     bothDestinationLocation = null;
 
 
+    /* Remove old markers */
+
     if(bothLocationsPickerMap){
 
         if(bothStartingMarker){
+
             bothLocationsPickerMap.removeLayer(
                 bothStartingMarker
             );
+
             bothStartingMarker = null;
         }
 
         if(bothDestinationMarker){
+
             bothLocationsPickerMap.removeLayer(
                 bothDestinationMarker
             );
+
             bothDestinationMarker = null;
         }
 
@@ -2171,14 +2177,16 @@ function openBothLocationsPicker(){
     updateBothLocationsStatus();
 
 
+    /* Create map first time */
+
     if(!bothLocationsPickerMap){
 
         bothLocationsPickerMap =
-            L.map("bothLocationsPickerMap")
-            .setView(
-                [20.5937,78.9629],
-                5
-            );
+    L.map("bothLocationsPickerMap")
+    .setView(
+        [17.3850,78.4867],
+        12
+    );
 
 
         L.tileLayer(
@@ -2192,6 +2200,8 @@ function openBothLocationsPicker(){
             bothLocationsPickerMap
         );
 
+
+        /* Tap map */
 
         bothLocationsPickerMap.on(
             "click",
@@ -2208,6 +2218,8 @@ function openBothLocationsPicker(){
     }
 
 
+    /* Make map display correctly */
+
     setTimeout(function(){
 
         bothLocationsPickerMap.invalidateSize();
@@ -2215,8 +2227,6 @@ function openBothLocationsPicker(){
     },150);
 
 }
-
-
 /* =====================================================
    MAP CLICK
 ===================================================== */
