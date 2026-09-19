@@ -2362,6 +2362,37 @@ fetch(routeUrl)
         const route =
             data.routes[0];
 
+/* Get estimated travel time */
+
+const routeTimeMinutes =
+    route.duration / 60;
+
+/* Format travel time */
+
+const hours =
+    Math.floor(routeTimeMinutes / 60);
+
+const minutes =
+    Math.round(routeTimeMinutes % 60);
+
+let routeTimeText = "";
+
+if(hours > 0){
+
+    routeTimeText =
+        hours +
+        " hr " +
+        minutes +
+        " min";
+
+}
+else{
+
+    routeTimeText =
+        minutes +
+        " min";
+
+}
 
         /* Draw actual road route */
 
@@ -2422,7 +2453,8 @@ fetch(routeUrl)
                         html:
                             "📏 " +
                             routeDistanceKm.toFixed(1) +
-                            " km",
+                            " km · ⏱️ " +
+                            routeTimeText,
                         iconSize:null
                     }),
                     interactive:false
