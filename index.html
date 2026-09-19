@@ -808,6 +808,56 @@ footer p{
 @media(max-width:700px){
     #installButton{padding:10px 12px;font-size:12px}
 }
+/* =====================================================
+   TRIP HELP PANEL
+===================================================== */
+
+.trip-help-panel {
+    margin-top: 16px;
+    padding: 16px;
+    background: rgba(37, 99, 235, 0.06);
+    border: 1px solid rgba(37, 99, 235, 0.15);
+    border-radius: 14px;
+}
+
+.trip-help-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: #0f4c81;
+}
+
+.trip-help-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.trip-help-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    padding: 11px;
+    background: rgba(255, 255, 255, 0.75);
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.trip-help-item span {
+    flex: 1;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .trip-help-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .trip-help-panel {
+        padding: 13px;
+    }
+}
 </style>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 </head>
@@ -1363,12 +1413,45 @@ footer p{
 
     <button onclick="openRoute()" id="routeButton">🗺️ Show Route & Map</button>
 
-    <div class="map-info" id="routeInfoText">
-        📍 Enter your starting location and destination.<br><br>
-        📏 Click <b>Show Distance</b> for a quick road-distance calculation.<br><br>
-        🗺️ Click <b>Show Route & Map</b> to see the route, distance and estimated travel time here.<br><br>
-        🔄 Select Round Trip if you are returning to the starting location.
+<div class="map-info" id="routeInfoText">
+
+    <div class="trip-help-title">
+        💡 How to Plan Your Trip
     </div>
+
+    <div class="trip-help-grid">
+
+        <div class="trip-help-item">
+            📍
+            <span>
+                Enter your starting location and destination.
+            </span>
+        </div>
+
+        <div class="trip-help-item">
+            📏
+            <span>
+                Click <b>Show Distance</b> for a quick road-distance calculation.
+            </span>
+        </div>
+
+        <div class="trip-help-item">
+            🗺️
+            <span>
+                Click <b>Show Route &amp; Map</b> to see the route, distance and estimated travel time.
+            </span>
+        </div>
+
+        <div class="trip-help-item">
+            🔄
+            <span>
+                Select <b>Round Trip</b> if you are returning to the starting location.
+            </span>
+        </div>
+
+    </div>
+
+</div>
 
     <div id="routePanel" class="route-panel">
         <div class="route-summary">
