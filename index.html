@@ -636,6 +636,22 @@ footer p{
     transform:rotate(-45deg);
     box-shadow:0 2px 8px rgba(0,0,0,.35);
 }
+/* =====================================================
+   BOTH LOCATIONS DISTANCE LABEL
+===================================================== */
+
+.both-location-distance-label{
+    background:var(--card);
+    color:var(--text);
+    border:1px solid rgba(37,99,235,.25);
+    border-radius:10px;
+    padding:6px 10px;
+    font-size:12px;
+    font-weight:700;
+    white-space:nowrap;
+    box-shadow:0 3px 10px rgba(0,0,0,.2);
+    text-align:center;
+}
 </style>
 <style>
 /* =====================================================
@@ -2168,6 +2184,9 @@ let bothLocationsPickerMap = null;
 let bothStartingMarker = null;
 let bothDestinationMarker = null;
 
+let bothLocationLine = null;
+let bothLocationDistanceLabel = null;
+
 let bothStartingLocation = null;
 let bothDestinationLocation = null;
 
@@ -2268,6 +2287,122 @@ function openBothLocationsPicker(){
 
     },150);
 
+}
+ /* =====================================================
+    DRAW LINE BETWEEN LOCATIONS
+ ===================================================== */
+
+function drawBothLocationLine(){
+
+    if(
+        !bothLocationsPickerMap ||
+        !bothStartingLocation ||
+        !bothDestinationLocation
+    ){
+        return;
+    }
+
+
+    /* Remove old line */
+
+    if(bothLocationLine){
+
+        bothLocationsPickerMap.removeLayer(
+            bothLocationLine
+        );
+
+        bothLocationLine = null;
+
+    }
+/* Remove old distance label */
+
+if(bothLocationDistanceLabel){
+
+    bothLocationsPickerMap.removeLayer(
+        bothLocationDistanceLabel
+    );
+
+    bothLocationDistanceLabel = null;
+
+}
+
+    /* Create new line */
+
+    bothLocationLine =
+        L.polyline(
+            [
+                [
+                    bothStartingLocation.lat,
+                    bothStartingLocation.lon
+                ],
+                [
+                    bothDestinationLocation.lat,
+                    bothDestinationLocation.lon
+                ]
+            ],
+            {
+                weight:4,
+                opacity:0.8,
+                dashArray:"8,8"
+            }
+        )
+        .addTo(
+            bothLocationsPickerMap
+        );
+/* Calculate distance between locations */
+
+const startPoint =
+    L.latLng(
+        bothStartingLocation.lat,
+        bothStartingLocation.lon
+    );
+
+const destinationPoint =
+    L.latLng(
+        bothDestinationLocation.lat,
+        bothDestinationLocation.lon
+    );
+
+const distanceMeters =
+    startPoint.distanceTo(
+        destinationPoint
+    );
+
+const distanceKm =
+    distanceMeters / 1000;
+
+/* Create distance label */
+
+const middleLat =
+    (
+        bothStartingLocation.lat +
+        bothDestinationLocation.lat
+    ) / 2;
+
+const middleLon =
+    (
+        bothStartingLocation.lon +
+        bothDestinationLocation.lon
+    ) / 2;
+
+bothLocationDistanceLabel =
+    L.marker(
+        [middleLat, middleLon],
+        {
+            icon:L.divIcon({
+                className:"both-location-distance-label",
+                html:
+                    "📏 " +
+                    distanceKm.toFixed(1) +
+                    " km",
+                iconSize:null
+            }),
+            interactive:false
+        }
+    )
+    .addTo(
+        bothLocationsPickerMap
+    );
 }
 /* =====================================================
    MAP CLICK
@@ -2435,6 +2570,10 @@ async function selectBothStartingPoint(lat,lon){
 
 
     updateBothLocationsStatus();
+
+/* Update line after moving starting location */
+
+drawBothLocationLine();
 
 }
 /* =====================================================
@@ -2608,6 +2747,10 @@ else{
 
 
     updateBothLocationsStatus();
+
+/* Draw line between both locations */
+
+drawBothLocationLine();
 
 }
 
