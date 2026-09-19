@@ -2501,14 +2501,45 @@ async function selectBothDestinationPoint(lat,lon){
         ]);
 
     }
+/* =====================================================
+   FIT BOTH LOCATIONS ON MAP
+===================================================== */
 
+if(
+    bothStartingLocation &&
+    bothDestinationLocation
+){
+
+    const bounds =
+        L.latLngBounds([
+            [
+                bothStartingLocation.lat,
+                bothStartingLocation.lon
+            ],
+            [
+                bothDestinationLocation.lat,
+                bothDestinationLocation.lon
+            ]
+        ]);
+
+    bothLocationsPickerMap.fitBounds(
+        bounds,
+        {
+            padding:[50,50],
+            maxZoom:15
+        }
+    );
+
+}
+
+else{
 
     bothLocationsPickerMap.setView(
         [lat,lon],
         16
     );
 
-
+}
     status.innerText =
         "🔄 Finding Destination...";
 
