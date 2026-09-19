@@ -2326,83 +2326,122 @@ if(bothLocationDistanceLabel){
 
 }
 
-    /* Create new line */
+    /* =====================================================
+   GET BEST ROAD ROUTE
+===================================================== */
 
-    bothLocationLine =
-        L.polyline(
-            [
-                [
-                    bothStartingLocation.lat,
-                    bothStartingLocation.lon
-                ],
-                [
-                    bothDestinationLocation.lat,
-                    bothDestinationLocation.lon
-                ]
-            ],
-            {
-                weight:4,
-                opacity:0.8,
-                dashArray:"8,8"
-            }
-        )
-        .addTo(
-            bothLocationsPickerMap
-        );
-/* Calculate distance between locations */
+const routeUrl =
+    "https://router.project-osrm.org/route/v1/driving/" +
+    bothStartingLocation.lon + "," +
+    bothStartingLocation.lat + ";" +
+    bothDestinationLocation.lon + "," +
+    bothDestinationLocation.lat +
+    "?overview=full&geometries=geojson";
 
-const startPoint =
-    L.latLng(
-        bothStartingLocation.lat,
-        bothStartingLocation.lon
-    );
 
-const destinationPoint =
-    L.latLng(
-        bothDestinationLocation.lat,
-        bothDestinationLocation.lon
-    );
+fetch(routeUrl)
+    .then(function(response){
 
-const distanceMeters =
-    startPoint.distanceTo(
-        destinationPoint
-    );
-
-const distanceKm =
-    distanceMeters / 1000;
-
-/* Create distance label */
-
-const middleLat =
-    (
-        bothStartingLocation.lat +
-        bothDestinationLocation.lat
-    ) / 2;
-
-const middleLon =
-    (
-        bothStartingLocation.lon +
-        bothDestinationLocation.lon
-    ) / 2;
-
-bothLocationDistanceLabel =
-    L.marker(
-        [middleLat, middleLon],
-        {
-            icon:L.divIcon({
-                className:"both-location-distance-label",
-                html:
-                    "📏 " +
-                    distanceKm.toFixed(1) +
-                    " km",
-                iconSize:null
-            }),
-            interactive:false
+        if(!response.ok){
+            throw new Error("Route request failed");
         }
-    )
-    .addTo(
-        bothLocationsPickerMap
-    );
+
+        return response.json();
+
+    })
+    .then(function(data){
+
+        if(
+            !data.routes ||
+            !data.routes.length
+        ){
+            throw new Error("No road route found");
+        }
+
+
+        const route =
+            data.routes[0];
+
+
+        /* Draw actual road route */
+
+        bothLocationLine =
+            L.geoJSON(
+                route.geometry,
+                {
+                    style:{
+                        weight:5,
+                        opacity:0.9
+                    }
+                }
+            )
+            .addTo(
+                bothLocationsPickerMap
+            );
+
+
+        /* Use road distance */
+
+        const routeDistanceKm =
+            route.distance / 1000;
+
+
+        /* Remove old distance label */
+
+        if(bothLocationDistanceLabel){
+
+            bothLocationsPickerMap.removeLayer(
+                bothLocationDistanceLabel
+            );
+
+            bothLocationDistanceLabel = null;
+
+        }
+
+
+        /* Find route midpoint */
+
+        const middlePoint =
+            route.geometry.coordinates[
+                Math.floor(
+                    route.geometry.coordinates.length / 2
+                )
+            ];
+
+
+        bothLocationDistanceLabel =
+            L.marker(
+                [
+                    middlePoint[1],
+                    middlePoint[0]
+                ],
+                {
+                    icon:L.divIcon({
+                        className:
+                            "both-location-distance-label",
+                        html:
+                            "📏 " +
+                            routeDistanceKm.toFixed(1) +
+                            " km",
+                        iconSize:null
+                    }),
+                    interactive:false
+                }
+            )
+            .addTo(
+                bothLocationsPickerMap
+            );
+
+    })
+    .catch(function(error){
+
+        console.error(
+            "Road route error:",
+            error
+        );
+
+    });
+
 }
 /* =====================================================
    MAP CLICK
